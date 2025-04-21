@@ -1,45 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js CDN -->
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Welcome to KPI Dashboard</h1>
-    <button id="logoutBtn">Logout</button>
-  </header>
-
-  <main>
-    <div id="dashboardContent">
-      <p>Loading data...</p>
-      
-      <!-- Table to display the KPI data -->
-      <table id="kpiTable" style="display: none;">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Employee</th>
-            <th>Department</th>
-            <th>Overtime Hours</th>
-            <th>KPI Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data rows will be populated by dashboard.js -->
-        </tbody>
-      </table>
-
-      <!-- Chart.js Canvas for the Bar chart -->
-      <div>
-        <canvas id="overtimeChart" width="400" height="200"></canvas>
-      </div>
+  <header class="header">
+    <div class="container header-container">
+      <h1 class="title">KPI Dashboard</h1>
+      <button id="logoutBtn" class="btn btn-logout">Logout</button>
     </div>
-  </main>
+  </header>  <main class="main-content">
+    <div id="dashboardContent" class="container">
+      <p class="loading">Loading data...</p><div class="table-wrapper">
+    <table id="kpiTable" class="styled-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Employee</th>
+          <th>Department</th>
+          <th>Overtime Hours</th>
+          <th>KPI Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-  <script src="js/dashboard.js"></script>
-</body>
+  <div class="chart-wrapper">
+    <canvas id="overtimeChart" width="600" height="300"></canvas>
+  </div>
+</div>
+
+  </main>  <script src="js/dashboard.js"></script></body>
 </html>
