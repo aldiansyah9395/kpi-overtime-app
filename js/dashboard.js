@@ -19,6 +19,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const rows = parseCSV(csv);
       const sortedRows = sortByOvertimeHours(rows); // Sorting the data
       renderTable(sortedRows);
+      renderChart(sortedRows); // Render the chart
     })
     .catch((err) => {
       document.getElementById("dashboardContent").innerHTML =
@@ -75,4 +76,43 @@ function renderTable(rows) {
 
   // Show the table after rendering the rows
   document.getElementById("kpiTable").style.display = "table";
+}
+
+// Function to render the chart with sorted data
+function renderChart(rows) {
+  const labels = rows.map(row => row["Employee"]); // Get employee names for labels
+  const overtimeData = rows.map(row => parseFloat(row["Overtime Hours"]) || 0); // Get overtime hours for data
+
+  const ctx = document.getElementById("overtimeChart").getContext("2d");
+
+  new Chart(ctx, {
+    type: "bar", // Type of chart (bar chart)
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Overtime Hours",
+        data: overtimeData,
+        backgroundColor: "#4CAF50", // Bar color
+        borderColor: "#388E3C", // Border color
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Employee"
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Overtime Hours"
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
