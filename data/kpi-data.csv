@@ -1,7 +1,7 @@
 Date,Employee,Department,Overtime Hours,KPI Status
-2025-04-01,John Doe,Logistics,2.5,Met
-2025-04-01,Jane Smith,Warehouse,3,Exceeded
-2025-04-02,Budi Santoso,QA,1.5,Below
-2025-04-02,Siti Aminah,Logistics,2,Met
-2025-04-03,Rama Putra,Warehouse,4,Exceeded
-2025-04-03,Ayu Lestari,QA,1,Met
+1,John Doe,Logistics,2.5,Blue Shift
+2,Jane Smith,Warehouse,3,Blue Shift
+3,Budi Santoso,QA,1.5,Green Shift
+4,Siti Aminah,Logistics,2,Green Shift
+5,Rama Putra,Warehouse,4,Non Shift
+6,Ayu Lestari,QA,1,Non Shift
