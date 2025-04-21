@@ -1,56 +1,122 @@
-/* css/style.css */
-
+/* General body styling */
 body {
   margin: 0;
   padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f6f8;
+  font-family: "Arial", sans-serif;
+  background-color: #f7f9fc;
   color: #333;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 50px auto;
   padding: 20px;
-  text-align: center;
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-  max-width: 120px;
-  margin-bottom: 20px;
+/* Header styling */
+header {
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eee;
 }
 
 h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #2c3e50;
+  font-size: 2.5rem;
+  color: #333;
+  margin: 0;
 }
 
-p {
-  font-size: 1rem;
-  margin-bottom: 30px;
-}
-
+/* Button styling */
 .btn {
   display: inline-block;
   padding: 12px 25px;
-  font-size: 1rem;
-  background-color: #2980b9;
+  font-size: 1.1rem;
+  background-color: #4CAF50;
   color: white;
   text-decoration: none;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .btn:hover {
-  background-color: #1c5980;
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+#logoutBtn {
+  background-color: #f44336;
+  float: right;
+}
+
+#logoutBtn:hover {
+  background-color: #e53935;
+}
+
+/* Form styling */
+.form-group {
+  margin-bottom: 20px;
+}
+
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table th, table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+table tr:hover {
+  background-color: #f5f5f5;
 }
 
 footer {
-  margin-top: 40px;
-  font-size: 0.9rem;
+  margin-top: 30px;
+  text-align: center;
   color: #777;
+  font-size: 0.9rem;
 }
