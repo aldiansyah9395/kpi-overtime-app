@@ -29,11 +29,11 @@ function renderTable(data) {
     const row = document.createElement("tr");
 
     row.innerHTML = `
-      <td>${item["Date"]}</td>
+      <td>${item["No"]}</td>
       <td>${item["Employee"]}</td>
       <td>${item["Department"]}</td>
       <td>${item["Overtime Hours"]}</td>
-      <td>${item["KPI Status"]}</td>
+      <td>${item["Shift"]}</td>
     `;
 
     tbody.appendChild(row);
