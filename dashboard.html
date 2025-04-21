@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard - KPI Overtime App</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js CDN -->
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>OVERTIME DASHBOARD PLASTIC NPI</h1>
-      <button id="logoutBtn" class="btn">Logout</button>
-    </header>
+  <header>
+    <h1>Welcome to KPI Dashboard</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
 
-    <main>
-      <div id="dashboardContent">
-        <p>Loading data...</p>
-        <table id="kpiTable" style="display: none;">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Employee</th>
-              <th>Department</th>
-              <th>Overtime Hours</th>
-              <th>KPI Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Data rows will be populated by dashboard.js -->
-          </tbody>
-        </table>
+  <main>
+    <div id="dashboardContent">
+      <p>Loading data...</p>
+      
+      <!-- Table to display the KPI data -->
+      <table id="kpiTable" style="display: none;">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Employee</th>
+            <th>Department</th>
+            <th>Overtime Hours</th>
+            <th>KPI Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data rows will be populated by dashboard.js -->
+        </tbody>
+      </table>
+
+      <!-- Chart.js Canvas for the Bar chart -->
+      <div>
+        <canvas id="overtimeChart" width="400" height="200"></canvas>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <footer>
-      <p>&copy; 2025 KPI Overtime App. All rights reserved.</p>
-    </footer>
-  </div>
-
-  <script src="js/dataParser.js"></script>
   <script src="js/dashboard.js"></script>
 </body>
 </html>
