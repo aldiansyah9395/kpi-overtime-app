@@ -1,5 +1,3 @@
-// js/dashboard.js
-
 window.addEventListener("DOMContentLoaded", () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
 
@@ -19,7 +17,8 @@ window.addEventListener("DOMContentLoaded", () => {
     .then((response) => response.text())
     .then((csv) => {
       const rows = parseCSV(csv);
-      renderTable(rows);
+      const sortedRows = sortByOvertimeHours(rows); // Sorting the data
+      renderTable(sortedRows);
     })
     .catch((err) => {
       document.getElementById("dashboardContent").innerHTML =
@@ -27,3 +26,12 @@ window.addEventListener("DOMContentLoaded", () => {
       console.error(err);
     });
 });
+
+// Function to sort rows by "Overtime Hours" in descending order
+function sortByOvertimeHours(rows) {
+  return rows.sort((a, b) => {
+    const hoursA = parseFloat(a["Overtime Hours"]);
+    const hoursB = parseFloat(b["Overtime Hours"]);
+    return hoursB - hoursA; // Descending order
+  });
+}
