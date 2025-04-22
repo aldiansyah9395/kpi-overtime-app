@@ -1,18 +1,28 @@
-// js/login.js
-
+// login.js
 document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+  e.preventDefault(); // Mencegah reload halaman
 
   const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const message = document.getElementById("loginMessage");
+  const password = document.getElementById("password").value;
 
-  // Dummy login (ganti dengan autentikasi asli kalau perlu)
-  if (username === "admin" && password === "1234") {
-    // Simpan status login ke localStorage
-    localStorage.setItem("isLoggedIn", "true");
-    window.location.href = "dashboard.html";
+  // Data login dummy
+  const validUsername = "admin";
+  const validPassword = "1234";
+
+  const errorMessage = document.getElementById("errorMessage");
+
+  if (username === validUsername && password === validPassword) {
+    // Simulasi sukses login
+    errorMessage.style.color = "green";
+    errorMessage.textContent = "Login berhasil! Mengalihkan...";
+    
+    // Redirect atau tindakan lain setelah login berhasil
+    setTimeout(() => {
+      window.location.href = "dashboard.html"; // ganti sesuai halaman tujuanmu
+    }, 1500);
   } else {
-    message.textContent = "Invalid username or password.";
+    // Tampilkan error
+    errorMessage.style.color = "#e74c3c";
+    errorMessage.textContent = "Username atau password salah!";
   }
 });
