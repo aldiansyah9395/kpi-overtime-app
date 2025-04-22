@@ -1,45 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - KPI Overtime App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/login-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="login-container">
+  <main class="login-container">
     <div class="login-box">
-      <h2>Login to Dashboard</h2>
-      <form id="loginForm">
-        <div class="input-group">
+      <h2 class="login-title">KPI Overtime Login</h2>
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
           <label for="username">Username</label>
           <input type="text" id="username" name="username" required />
         </div>
-        <div class="input-group">
+        <div class="form-group">
           <label for="password">Password</label>
           <input type="password" id="password" name="password" required />
         </div>
-        <button type="submit" class="btn-login">Login</button>
+        <button type="submit" class="btn btn-login">Login</button>
+        <p id="errorMessage" class="error-message"></p>
       </form>
     </div>
-  </div>
-
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form from submitting the usual way
-
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
-      // Simple client-side validation (just for demo, not secure)
-      if (username === 'admin' && password === '1234') {
-        // Redirect to the dashboard on successful login
-        window.location.href = 'dashboard.html';
-      } else {
-        alert('Invalid credentials. Please try again.');
-      }
-    });
-  </script>
-</body>
+  </main>  <script src="js/login.js"></script></body>
 </html>
