@@ -77,6 +77,7 @@ body {
 
 .styled-table th:nth-child(3), .styled-table td:nth-child(3) {
   width: 25%; /* Kolom Department */
+  text-align: center; /* Center untuk isi data kolom Employee */
 }
 
 .styled-table th:nth-child(4), .styled-table td:nth-child(4) {
@@ -85,6 +86,7 @@ body {
 
 .styled-table th:nth-child(5), .styled-table td:nth-child(5) {
   width: 15%; /* Kolom Shift */
+  text-align: left; /* Center untuk isi data kolom Employee */
 }
 
 .chart-wrapper {
