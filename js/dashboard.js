@@ -6,20 +6,18 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Logout button
   document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("isLoggedIn");
     window.location.href = "login.html";
   });
 
-  // Load CSV data
   fetch("data/kpi-data.csv")
     .then((response) => response.text())
     .then((csv) => {
       const rows = parseCSV(csv);
-      const sortedRows = sortByOvertimeHours(rows); // Sorting the data
+      const sortedRows = sortByOvertimeHours(rows);
       renderTable(sortedRows);
-      renderChart(sortedRows); // Render the chart
+      renderChart(sortedRows);
     })
     .catch((err) => {
       document.getElementById("dashboardContent").innerHTML =
@@ -28,7 +26,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Function to sort rows by "Overtime Hours" in descending order
 function sortByOvertimeHours(rows) {
   return rows.sort((a, b) => {
     const hoursA = parseFloat(a["Overtime Hours"]) || 0;
@@ -37,7 +34,6 @@ function sortByOvertimeHours(rows) {
   });
 }
 
-// Function to parse CSV content
 function parseCSV(csv) {
   const lines = csv.split("\n").filter(line => line.trim() !== "");
   const headers = lines[0].split(",");
@@ -48,7 +44,7 @@ function parseCSV(csv) {
     const row = {};
 
     headers.forEach((header, index) => {
-      row[header.trim()] = values[index].trim();
+      row[header.trim()] = values[index]?.trim() || "";
     });
 
     rows.push(row);
@@ -57,18 +53,24 @@ function parseCSV(csv) {
   return rows;
 }
 
-// Function to render the table with sorted data
 function renderTable(rows) {
   const tableBody = document.querySelector("#kpiTable tbody");
-  tableBody.innerHTML = ""; // Clear any existing rows
+  tableBody.innerHTML = "";
 
-  rows.forEach((row) => {
+  rows.forEach((row, index) => {
     const tr = document.createElement("tr");
 
-    // Gunakan urutan sesuai header CSV yang baru
-    ["No", "Employee", "Department", "Overtime Hours", "Shift"].forEach((key) => {
+    const columns = [
+      index + 1,                       // No: generate otomatis
+      row["Employee"],
+      row["Department"],
+      row["Overtime Hours"],
+      row["Shift"]
+    ];
+
+    columns.forEach((value) => {
       const td = document.createElement("td");
-      td.textContent = row[key];
+      td.textContent = value;
       tr.appendChild(td);
     });
 
@@ -78,7 +80,6 @@ function renderTable(rows) {
   document.getElementById("kpiTable").style.display = "table";
 }
 
-// Function to render the chart with sorted data
 function renderChart(rows) {
   const labels = rows.map(row => row["Employee"]);
   const overtimeData = rows.map(row => parseFloat(row["Overtime Hours"]) || 0);
@@ -98,7 +99,7 @@ function renderChart(rows) {
       }]
     },
     options: {
-      indexAxis: "x",
+      indexAxis: 'x',
       scales: {
         x: {
           title: {
