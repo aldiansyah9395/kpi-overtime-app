@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KPI Overtime Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body>
   <div class="container">
@@ -16,9 +17,10 @@
     </header>
 
     <main id="dashboardContent">
+      <!-- Chart -->
       <canvas id="overtimeChart" height="100"></canvas>
-      <canvas id="shiftPieChart" height="100" style="margin-top: 50px;"></canvas>
 
+      <!-- KPI Table -->
       <table id="kpiTable">
         <thead>
           <tr>
@@ -34,6 +36,7 @@
     </main>
   </div>
 
+  <!-- Dashboard script -->
   <script src="js/dashboard.js"></script>
 </body>
 </html>
