@@ -17,149 +17,144 @@ window.addEventListener("DOMContentLoaded", () => {
       const rows = parseCSV(csv);
       const sortedRows = sortByOvertimeHours(rows);
       renderTable(sortedRows);
-      renderChart(sortedRows);
-      renderShiftPieChart(sortedRows);
+      renderBarChart(sortedRows);
+      renderShiftChart(sortedRows);
     })
     .catch((err) => {
-      document.getElementById("dashboardContent").innerHTML =
-        "<p>Failed to load KPI data.</p>";
+      document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
       console.error(err);
     });
 });
 
 function sortByOvertimeHours(rows) {
-  return rows.sort((a, b) => {
-    const hoursA = parseFloat(a["Overtime Hours"]) || 0;
-    const hoursB = parseFloat(b["Overtime Hours"]) || 0;
-    return hoursB - hoursA;
-  });
+  return rows.sort((a, b) => parseFloat(b["Overtime Hours"]) - parseFloat(a["Overtime Hours"]));
 }
 
 function parseCSV(csv) {
-  const lines = csv.split("\n").filter(line => line.trim() !== "");
+  const lines = csv.trim().split("\n");
   const headers = lines[0].split(",");
   const rows = [];
 
   for (let i = 1; i < lines.length; i++) {
     const values = lines[i].split(",");
     const row = {};
-
     headers.forEach((header, index) => {
       row[header.trim()] = values[index]?.trim() || "";
     });
-
     rows.push(row);
   }
 
-  return rows;
+  return rows.map((row, index) => ({
+    "No": index + 1,
+    "Employee": row["Employee"],
+    "Department": row["Department"],
+    "Overtime Hours": row["Overtime Hours"],
+    "Shift": row["Shift"]
+  }));
 }
 
 function renderTable(rows) {
   const tableBody = document.querySelector("#kpiTable tbody");
   tableBody.innerHTML = "";
 
-  rows.forEach((row, index) => {
+  rows.forEach((row) => {
     const tr = document.createElement("tr");
-
-    const columns = [
-      index + 1,
-      row["Employee"],
-      row["Department"],
-      row["Overtime Hours"],
-      row["Shift"]
-    ];
-
-    columns.forEach((value) => {
+    Object.values(row).forEach((value) => {
       const td = document.createElement("td");
       td.textContent = value;
       tr.appendChild(td);
     });
-
     tableBody.appendChild(tr);
   });
 
   document.getElementById("kpiTable").style.display = "table";
 }
 
-function renderChart(rows) {
+function renderBarChart(rows) {
   const labels = rows.map(row => row["Employee"]);
-  const overtimeData = rows.map(row => parseFloat(row["Overtime Hours"]) || 0);
+  const data = rows.map(row => parseFloat(row["Overtime Hours"]) || 0);
 
   const ctx = document.getElementById("overtimeChart").getContext("2d");
-
   new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
       datasets: [{
         label: "Overtime Hours",
-        data: overtimeData,
+        data: data,
         backgroundColor: "#4CAF50",
         borderColor: "#388E3C",
         borderWidth: 1
       }]
     },
     options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Overtime Hours by Employee"
+        }
+      },
       scales: {
         x: {
-          title: {
-            display: true,
-            text: "Employee"
-          }
+          title: { display: true, text: "Employee" }
         },
         y: {
-          title: {
-            display: true,
-            text: "Overtime Hours"
-          },
-          beginAtZero: true
+          beginAtZero: true,
+          title: { display: true, text: "Hours" }
         }
       }
     }
   });
 }
 
-function renderShiftPieChart(rows) {
-  const shiftCounts = {};
+function renderShiftChart(rows) {
+  const shiftCounts = { Shift1: 0, Shift2: 0, Shift3: 0 };
 
   rows.forEach(row => {
-    const shift = row["Shift"] || "Unknown";
-    shiftCounts[shift] = (shiftCounts[shift] || 0) + 1;
+    const shift = row["Shift"];
+    if (shiftCounts[shift] !== undefined) {
+      shiftCounts[shift]++;
+    }
   });
 
   const labels = Object.keys(shiftCounts);
   const data = Object.values(shiftCounts);
 
-  const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#8BC34A", "#9C27B0"];
-
   const ctx = document.getElementById("shiftPieChart").getContext("2d");
-
   new Chart(ctx, {
     type: "pie",
     data: {
       labels: labels,
       datasets: [{
         data: data,
-        backgroundColor: colors,
-        borderWidth: 1
+        backgroundColor: ["#2196F3", "#FFC107", "#FF5722"]
       }]
     },
     options: {
+      responsive: true,
       plugins: {
-        legend: {
-          position: "bottom"
+        title: {
+          display: true,
+          text: "Shift Distribution"
         },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const total = data.reduce((a, b) => a + b, 0);
-              const value = context.parsed;
-              const percentage = ((value / total) * 100).toFixed(1);
-              return `${context.label}: ${value} (${percentage}%)`;
-            }
+        legend: {
+          position: "right"
+        },
+        datalabels: {
+          formatter: (value, context) => {
+            const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${context.chart.data.labels[context.dataIndex]}: ${value} (${percentage}%)`;
+          },
+          color: "#fff",
+          font: {
+            weight: "bold"
           }
         }
       }
-    }
+    },
+    plugins: [ChartDataLabels]
   });
 }
