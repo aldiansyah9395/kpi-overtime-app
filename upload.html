@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload CSV - KPI Overtime</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/upload.css" />
+</head>
+<body>
+  <div class="upload-container">
+    <h2>Upload CSV Data</h2>
+    <input type="file" id="csvFile" accept=".csv" />
+    <br/>
+    <button class="upload-btn" onclick="uploadCSV()">Upload</button>
+    <button class="back-btn" onclick="goBack()">Kembali</button>
+    <p id="message" class="message"></p>
+  </div>
+
+  <script>
+    function uploadCSV() {
+      const fileInput = document.getElementById('csvFile');
+      const message = document.getElementById('message');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        message.textContent = "Pilih file CSV terlebih dahulu.";
+        message.className = 'message error'; // Pesan error
+        return;
+      }
+
+      // Simulasi proses upload
+      message.textContent = `File "${file.name}" berhasil dipilih (belum diunggah karena belum ada backend).`;
+      message.className = 'message success'; // Pesan sukses
+    }
+
+    function goBack() {
+      // Mengarahkan ke halaman dashboard.html
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>
