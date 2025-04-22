@@ -72,6 +72,7 @@ body {
 
 .styled-table th:nth-child(2), .styled-table td:nth-child(2) {
   width: 30%; /* Kolom Employee */
+  text-align: left; /* Rata kiri untuk isi data kolom Employee */
 }
 
 .styled-table th:nth-child(3), .styled-table td:nth-child(3) {
