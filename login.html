@@ -11,7 +11,7 @@
   <div class="login-container">
     <div class="login-box">
       <h2>Login to Dashboard</h2>
-      <form action="" method="POST">
+      <form id="loginForm">
         <div class="input-group">
           <label for="username">Username</label>
           <input type="text" id="username" name="username" required />
@@ -24,5 +24,22 @@
       </form>
     </div>
   </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form from submitting the usual way
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Simple client-side validation (just for demo, not secure)
+      if (username === 'admin' && password === '1234') {
+        // Redirect to the dashboard on successful login
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('Invalid credentials. Please try again.');
+      }
+    });
+  </script>
 </body>
 </html>
