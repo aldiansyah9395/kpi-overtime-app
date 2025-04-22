@@ -3,20 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>KPI Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9fafc;
+      color: #333;
+    }
+    .header {
+      background-color: #0d47a1;
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .btn-logout {
+      background-color: #f44336;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .main-content {
+      padding: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .table-wrapper {
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .styled-table th, .styled-table td {
+      padding: 12px 16px;
+      text-align: right;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .styled-table th {
+      background-color: #e3f2fd;
+      color: #0d47a1;
+      text-align: left;
+    }
+    .styled-table td:first-child, .styled-table th:first-child {
+      text-align: left;
+    }
+    .chart-wrapper {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .loading {
+      text-align: center;
+      font-style: italic;
+      color: #999;
+    }
+  </style>
 </head>
 <body>
   <header class="header">
-    <div class="container header-container">
+    <div class="header-container">
       <h1 class="title">KPI Dashboard</h1>
-      <button id="logoutBtn" class="btn btn-logout">Logout</button>
+      <button id="logoutBtn" class="btn-logout">Logout</button>
     </div>
   </header>
 
   <main class="main-content">
-    <div id="dashboardContent" class="container">
+    <div id="dashboardContent">
       <p class="loading">Loading data...</p>
 
       <div class="table-wrapper">
