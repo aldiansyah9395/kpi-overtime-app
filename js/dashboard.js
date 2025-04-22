@@ -31,9 +31,9 @@ window.addEventListener("DOMContentLoaded", () => {
 // Function to sort rows by "Overtime Hours" in descending order
 function sortByOvertimeHours(rows) {
   return rows.sort((a, b) => {
-    const hoursA = parseFloat(a["Overtime Hours"]) || 0; // Convert to number
-    const hoursB = parseFloat(b["Overtime Hours"]) || 0; // Convert to number
-    return hoursB - hoursA; // Descending order
+    const hoursA = parseFloat(a["Overtime Hours"]) || 0;
+    const hoursB = parseFloat(b["Overtime Hours"]) || 0;
+    return hoursB - hoursA;
   });
 }
 
@@ -65,39 +65,40 @@ function renderTable(rows) {
   rows.forEach((row) => {
     const tr = document.createElement("tr");
 
-    Object.values(row).forEach((value) => {
+    // Gunakan urutan sesuai header CSV yang baru
+    ["No", "Employee", "Department", "Overtime Hours", "Shift"].forEach((key) => {
       const td = document.createElement("td");
-      td.textContent = value;
+      td.textContent = row[key];
       tr.appendChild(td);
     });
 
     tableBody.appendChild(tr);
   });
 
-  // Show the table after rendering the rows
   document.getElementById("kpiTable").style.display = "table";
 }
 
 // Function to render the chart with sorted data
 function renderChart(rows) {
-  const labels = rows.map(row => row["Employee"]); // Get employee names for labels
-  const overtimeData = rows.map(row => parseFloat(row["Overtime Hours"]) || 0); // Get overtime hours for data
+  const labels = rows.map(row => row["Employee"]);
+  const overtimeData = rows.map(row => parseFloat(row["Overtime Hours"]) || 0);
 
   const ctx = document.getElementById("overtimeChart").getContext("2d");
 
   new Chart(ctx, {
-    type: "bar", // Type of chart (bar chart)
+    type: "bar",
     data: {
       labels: labels,
       datasets: [{
         label: "Overtime Hours",
         data: overtimeData,
-        backgroundColor: "#4CAF50", // Bar color
-        borderColor: "#388E3C", // Border color
+        backgroundColor: "#4CAF50",
+        borderColor: "#388E3C",
         borderWidth: 1
       }]
     },
     options: {
+      indexAxis: "x",
       scales: {
         x: {
           title: {
