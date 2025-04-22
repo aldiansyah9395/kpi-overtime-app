@@ -1,42 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KPI Overtime Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
-
-  <!-- Chart.js CDN -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KPI Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-weight: 700;
+    }
+    table {
+      margin-top: 30px;
+    }
+    canvas {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>KPI Overtime Dashboard</h1>
-      <button id="logoutBtn">Logout</button>
-    </header>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-primary">KPI Overtime Dashboard</h1>
+      <button id="logoutBtn" class="btn btn-danger">Logout</button>
+    </div><div class="table-responsive">
+  <table id="kpiTable" class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>No</th>
+        <th>Employee</th>
+        <th>Department</th>
+        <th>Overtime Hours</th>
+        <th>Shift</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
-    <main id="dashboardContent">
-      <!-- Chart -->
-      <canvas id="overtimeChart" height="100"></canvas>
-
-      <!-- KPI Table -->
-      <table id="kpiTable">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Employee</th>
-            <th>Department</th>
-            <th>Overtime Hours</th>
-            <th>Shift</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </main>
+<div class="row mt-5">
+  <div class="col-md-8">
+    <canvas id="overtimeChart" height="200"></canvas>
   </div>
+  <div class="col-md-4">
+    <canvas id="shiftPieChart" height="200"></canvas>
+  </div>
+</div>
 
-  <!-- Dashboard script -->
-  <script src="js/dashboard.js"></script>
-</body>
+  </div>  <script src="../js/dashboard.js"></script></body>
 </html>
