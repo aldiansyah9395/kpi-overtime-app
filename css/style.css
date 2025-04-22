@@ -4,12 +4,14 @@ body {
   background-color: #f9fafc;
   color: #333;
 }
+
 .header {
   background-color: #0d47a1;
   color: white;
   padding: 1rem 2rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -17,6 +19,7 @@ body {
   max-width: 1100px;
   margin: 0 auto;
 }
+
 .btn-logout {
   background-color: #f44336;
   border: none;
@@ -26,15 +29,18 @@ body {
   cursor: pointer;
   font-weight: 600;
 }
+
 .main-content {
   padding: 2rem;
   max-width: 1100px;
   margin: 0 auto;
 }
+
 .table-wrapper {
   margin-bottom: 2rem;
   overflow-x: auto;
 }
+
 .styled-table {
   width: 100%;
   border-collapse: collapse;
@@ -42,25 +48,51 @@ body {
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
+
 .styled-table th, .styled-table td {
   padding: 12px 16px;
   text-align: right;
   border-bottom: 1px solid #e0e0e0;
 }
+
 .styled-table th {
   background-color: #e3f2fd;
   color: #0d47a1;
   text-align: left;
 }
+
 .styled-table td:first-child, .styled-table th:first-child {
   text-align: left;
 }
+
+/* Atur lebar kolom */
+.styled-table th:nth-child(1), .styled-table td:nth-child(1) {
+  width: 10%; /* Kolom No */
+}
+
+.styled-table th:nth-child(2), .styled-table td:nth-child(2) {
+  width: 30%; /* Kolom Employee */
+}
+
+.styled-table th:nth-child(3), .styled-table td:nth-child(3) {
+  width: 25%; /* Kolom Department */
+}
+
+.styled-table th:nth-child(4), .styled-table td:nth-child(4) {
+  width: 20%; /* Kolom Overtime Hours */
+}
+
+.styled-table th:nth-child(5), .styled-table td:nth-child(5) {
+  width: 15%; /* Kolom Shift */
+}
+
 .chart-wrapper {
   background: white;
   padding: 1rem;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
+
 .loading {
   text-align: center;
   font-style: italic;
