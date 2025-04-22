@@ -1,38 +1,49 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KPI Overtime Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header class="header">
-    <div class="container header-container">
-      <h1 class="title">KPI Dashboard</h1>
-      <button id="logoutBtn" class="btn btn-logout">Logout</button>
+  <div class="container mx-auto p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-green-700">KPI Overtime Dashboard</h1>
+      <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Logout</button>
     </div>
-  </header>  <main class="main-content">
-    <div id="dashboardContent" class="container">
-      <p class="loading">Loading data...</p><div class="table-wrapper">
-    <table id="kpiTable" class="styled-table" style="display: none;">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Employee</th>
-          <th>Department</th>
-          <th>Overtime Hours</th>
-          <th>Shift</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+
+    <div id="dashboardContent">
+      <div class="card overflow-x-auto">
+        <table id="kpiTable" class="table-auto w-full border-collapse hidden">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border px-4 py-2">No</th>
+              <th class="border px-4 py-2">Employee</th>
+              <th class="border px-4 py-2">Department</th>
+              <th class="border px-4 py-2">Overtime Hours</th>
+              <th class="border px-4 py-2">Shift</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Bar Chart -->
+      <div class="card mt-6">
+        <h2 class="text-xl font-semibold mb-4 text-center">Overtime Hours Chart</h2>
+        <canvas id="overtimeChart" height="200"></canvas>
+      </div>
+
+      <!-- Pie Chart -->
+      <div class="card mt-6">
+        <h2 class="text-xl font-semibold mb-4 text-center">Shift Distribution</h2>
+        <canvas id="shiftPieChart" height="200"></canvas>
+      </div>
+    </div>
   </div>
 
-  <div class="chart-wrapper">
-    <canvas id="overtimeChart" width="600" height="300"></canvas>
-  </div>
-</div>
-
-  </main>  <script src="js/dashboard.js"></script></body>
+  <script src="js/dashboard.js"></script>
+</body>
 </html>
