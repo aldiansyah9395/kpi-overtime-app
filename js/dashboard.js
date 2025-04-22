@@ -18,6 +18,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const sortedRows = sortByOvertimeHours(rows);
       renderTable(sortedRows);
       renderChart(sortedRows);
+      renderShiftPieChart(sortedRows);
     })
     .catch((err) => {
       document.getElementById("dashboardContent").innerHTML =
@@ -61,7 +62,7 @@ function renderTable(rows) {
     const tr = document.createElement("tr");
 
     const columns = [
-      index + 1,                       // No: generate otomatis
+      index + 1,
       row["Employee"],
       row["Department"],
       row["Overtime Hours"],
@@ -99,7 +100,6 @@ function renderChart(rows) {
       }]
     },
     options: {
-      indexAxis: 'x',
       scales: {
         x: {
           title: {
@@ -113,6 +113,51 @@ function renderChart(rows) {
             text: "Overtime Hours"
           },
           beginAtZero: true
+        }
+      }
+    }
+  });
+}
+
+function renderShiftPieChart(rows) {
+  const shiftCounts = {};
+
+  rows.forEach(row => {
+    const shift = row["Shift"] || "Unknown";
+    shiftCounts[shift] = (shiftCounts[shift] || 0) + 1;
+  });
+
+  const labels = Object.keys(shiftCounts);
+  const data = Object.values(shiftCounts);
+
+  const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#8BC34A", "#9C27B0"];
+
+  const ctx = document.getElementById("shiftPieChart").getContext("2d");
+
+  new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          position: "bottom"
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const total = data.reduce((a, b) => a + b, 0);
+              const value = context.parsed;
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${context.label}: ${value} (${percentage}%)`;
+            }
+          }
         }
       }
     }
