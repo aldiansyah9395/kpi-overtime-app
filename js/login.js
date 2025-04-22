@@ -5,15 +5,14 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
-  const message = document.getElementById("errorMessage"); // disamakan dengan id di HTML
+  const message = document.getElementById("loginMessage");
 
-  // Dummy login
+  // Dummy login (ganti dengan autentikasi asli kalau perlu)
   if (username === "admin" && password === "1234") {
     // Simpan status login ke localStorage
     localStorage.setItem("isLoggedIn", "true");
     window.location.href = "dashboard.html";
   } else {
-    message.style.color = "#e74c3c";
-    message.textContent = "Username atau password salah.";
+    message.textContent = "Invalid username or password.";
   }
 });
