@@ -1,164 +1,68 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-/* ===== GLOBAL STYLES ===== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
+  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #f0f4f8;
+  background-color: #f9fafc;
   color: #333;
-  line-height: 1.6;
 }
-
-a {
-  text-decoration: none;
+.header {
+  background-color: #0d47a1;
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
-.container {
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
 }
-
-/* ===== HEADER ===== */
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.logo {
-  width: 80px;
-  height: auto;
-  margin-bottom: 1rem;
-}
-
-.title {
-  font-size: 2rem;
-  color: #0d47a1;
-}
-
-/* ===== BUTTONS ===== */
-.btn {
-  display: inline-block;
-  padding: 12px 24px;
-  background-color: #0d47a1;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-  background-color: #1565c0;
-}
-
 .btn-logout {
   background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
 }
-
-.btn-logout:hover {
-  background-color: #d32f2f;
-}
-
-/* ===== MAIN CONTENT ===== */
 .main-content {
-  padding: 2rem 0;
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
-
-/* ===== TABLE ===== */
 .table-wrapper {
   margin-bottom: 2rem;
   overflow-x: auto;
 }
-
 .styled-table {
   width: 100%;
   border-collapse: collapse;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-
-.styled-table th,
-.styled-table td {
+.styled-table th, .styled-table td {
   padding: 12px 16px;
   text-align: right;
   border-bottom: 1px solid #e0e0e0;
 }
-
 .styled-table th {
   background-color: #e3f2fd;
   color: #0d47a1;
   text-align: left;
 }
-
-.styled-table td:first-child,
-.styled-table th:first-child,
-.styled-table td:nth-child(2),
-.styled-table th:nth-child(2) {
+.styled-table td:first-child, .styled-table th:first-child {
   text-align: left;
 }
-
-/* Kolom "No" dan "Department" menjadi rata tengah (center) */
-.styled-table th:nth-child(1),
-.styled-table td:nth-child(1),
-.styled-table th:nth-child(3),
-.styled-table td:nth-child(3) {
-  text-align: center;
-}
-
-/* Kolom "Employee" - header center, isi kiri */
-.styled-table th:nth-child(2),
-.styled-table td:nth-child(2) {
-  text-align: left;
-}
-
-/* Kolom "Shift" - header center, isi kanan */
-.styled-table th:nth-child(5),
-.styled-table td:nth-child(5) {
-  text-align: right;
-}
-
-/* ===== CHART ===== */
 .chart-wrapper {
-  background-color: #fff;
+  background: white;
   padding: 1rem;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
-
-/* ===== FOOTER ===== */
-footer {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #999;
-  margin-top: 3rem;
-}
-
-/* ===== LOADING ===== */
 .loading {
   text-align: center;
   font-style: italic;
   color: #999;
-}
-
-/* ===== HEADER BAR (DASHBOARD) ===== */
-.header {
-  background-color: #0d47a1;
-  color: white;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
