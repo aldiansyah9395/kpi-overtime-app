@@ -100,9 +100,12 @@ header {
 }
 
 .styled-table td:first-child,
-.styled-table th:first-child {
+.styled-table th:first-child,
+.styled-table td:nth-child(2),
+.styled-table th:nth-child(2) {
   text-align: left;
 }
+
 
 /* ===== CHART ===== */
 .chart-wrapper {
