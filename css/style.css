@@ -106,6 +106,25 @@ header {
   text-align: left;
 }
 
+/* Kolom "No" dan "Department" menjadi rata tengah (center) */
+.styled-table th:nth-child(1),
+.styled-table td:nth-child(1),
+.styled-table th:nth-child(3),
+.styled-table td:nth-child(3) {
+  text-align: center;
+}
+
+/* Kolom "Employee" - header center, isi kiri */
+.styled-table th:nth-child(2),
+.styled-table td:nth-child(2) {
+  text-align: left;
+}
+
+/* Kolom "Shift" - header center, isi kanan */
+.styled-table th:nth-child(5),
+.styled-table td:nth-child(5) {
+  text-align: right;
+}
 
 /* ===== CHART ===== */
 .chart-wrapper {
