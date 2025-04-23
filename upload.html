@@ -25,17 +25,45 @@
 
       if (!file) {
         message.textContent = "Pilih file CSV terlebih dahulu.";
-        message.className = 'message error'; // Pesan error
+        message.className = 'message error';
         return;
       }
 
-      // Simulasi proses upload
-      message.textContent = `File "${file.name}" berhasil dipilih (belum diunggah karena belum ada backend).`;
-      message.className = 'message success'; // Pesan sukses
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const csv = e.target.result;
+        const lines = csv.split('\n').map(line => line.trim()).filter(line => line);
+        const data = lines.map(line => line.split(','));
+
+        fetch("https://script.google.com/macros/s/AKfycbyMjE6BbSIMhQHC509JAIghHFh3NlMRCNoIC2L1zgtCCSX4w9dAfp4t1gpt0eAaDLa2/exec", {
+          method: "POST",
+          body: JSON.stringify({ data: data }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.status === "success") {
+            message.textContent = "Data berhasil diunggah ke Google Sheets!";
+            message.className = 'message success';
+          } else {
+            message.textContent = "Gagal mengunggah data.";
+            message.className = 'message error';
+          }
+        })
+        .catch(error => {
+          console.error("Upload error:", error);
+          message.textContent = "Terjadi kesalahan saat upload.";
+          message.className = 'message error';
+        });
+      };
+
+      reader.readAsText(file);
     }
 
     function goBack() {
-      // Mengarahkan ke halaman dashboard.html
       window.location.href = 'dashboard.html';
     }
   </script>
