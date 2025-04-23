@@ -5,7 +5,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
-  const message = document.getElementById("loginMessage");
+  const message = document.getElementById("errorMessage");
 
   // Dummy login (ganti dengan autentikasi asli kalau perlu)
   if (username === "admin" && password === "1234") {
