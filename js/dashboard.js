@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbzUP482PmHzwYaY5U2s_gKPWYStSRKmWkKFMQMJlJOHaBQMbxn_FnIomWHT6g7QX00PHw/exec?mode=data"; // Ganti dengan URL kamu
+  const API_URL = "https://script.google.com/macros/s/AKfycbzUP482PmHzwYaY5U2s_gKPWYStSRKmWkKFMQMJlJOHaBQMbxn_FnIomWHT6g7QX00PHw/exec?mode=data";
 
   fetch(API_URL)
     .then((response) => response.json())
@@ -27,10 +27,21 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+function parseOvertime(value) {
+  if (!value) return 0;
+
+  // Jika nilainya berbentuk tanggal (ISO)
+  if (typeof value === "string" && value.includes("T")) {
+    return 0;
+  }
+
+  return parseFloat(value) || 0;
+}
+
 function sortByOvertimeHours(rows) {
   return rows.sort((a, b) => {
-    const hoursA = parseFloat(a["Overtime Hours"]) || 0;
-    const hoursB = parseFloat(b["Overtime Hours"]) || 0;
+    const hoursA = parseOvertime(a["Overtime Hours"]);
+    const hoursB = parseOvertime(b["Overtime Hours"]);
     return hoursB - hoursA;
   });
 }
@@ -46,7 +57,7 @@ function renderTable(rows) {
       index + 1,
       row["Employee"] || row["Nama"] || "-",
       row["Department"] || "-",
-      row["Overtime Hours"] || "0",
+      parseOvertime(row["Overtime Hours"]),
       row["Shift"] || "-"
     ];
 
@@ -64,7 +75,13 @@ function renderTable(rows) {
 
 function renderChart(rows) {
   const labels = rows.map(row => row["Employee"] || row["Nama"] || "-");
-  const overtimeData = rows.map(row => parseFloat(row["Overtime Hours"]) || 0);
+  const overtimeData = rows.map(row => parseOvertime(row["Overtime Hours"]));
+  const colors = rows.map(row => {
+    const shift = (row["Shift"] || "").toLowerCase();
+    if (shift.includes("green")) return "#4CAF50";
+    if (shift.includes("blue")) return "#2196F3";
+    return "#FF9800"; // Non Shift
+  });
 
   const ctx = document.getElementById("overtimeChart").getContext("2d");
 
@@ -75,8 +92,8 @@ function renderChart(rows) {
       datasets: [{
         label: "Overtime Hours",
         data: overtimeData,
-        backgroundColor: "#4CAF50",
-        borderColor: "#388E3C",
+        backgroundColor: colors,
+        borderColor: colors,
         borderWidth: 1
       }]
     },
