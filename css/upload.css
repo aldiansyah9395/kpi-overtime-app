@@ -1,0 +1,115 @@
+/* Mengatur font dan latar belakang */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Kontainer untuk upload CSV */
+  .upload-container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Efek hover untuk kontainer */
+  .upload-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Judul */
+  h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 1.75rem;
+  }
+  
+  /* Styling input file */
+  input[type="file"] {
+    display: block;
+    margin: 1.5rem 0;
+    padding: 0.8rem;
+    width: 100%;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  /* Hover effect untuk input file */
+  input[type="file"]:hover {
+    background-color: #e6e6e6;
+    border-color: #007bff;
+  }
+  
+  /* Styling untuk tombol upload */
+  button.upload-btn {
+    padding: 0.8rem 2rem;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Efek hover pada tombol upload */
+  button.upload-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+  
+  /* Styling untuk tombol kembali */
+  button.back-btn {
+    padding: 0.8rem 1.5rem;
+    background-color: #6c757d;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Efek hover pada tombol kembali */
+  button.back-btn:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+  }
+  
+  /* Pesan status */
+  .message {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  /* Pesan sukses */
+  .message.success {
+    color: #28a745;
+  }
+  
+  /* Pesan error */
+  .message.error {
+    color: #dc3545;
+  }
+  
