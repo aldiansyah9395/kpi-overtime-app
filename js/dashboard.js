@@ -11,10 +11,11 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  fetch("data/kpi-data.csv")
-    .then((response) => response.text())
-    .then((csv) => {
-      const rows = parseCSV(csv);
+  const API_URL = "https://script.google.com/macros/s/AKfycbzUP482PmHzwYaY5U2s_gKPWYStSRKmWkKFMQMJlJOHaBQMbxn_FnIomWHT6g7QX00PHw/exec?mode=data"; // Ganti dengan URL kamu
+
+  fetch(API_URL)
+    .then((response) => response.json())
+    .then((rows) => {
       const sortedRows = sortByOvertimeHours(rows);
       renderTable(sortedRows);
       renderChart(sortedRows);
@@ -34,25 +35,6 @@ function sortByOvertimeHours(rows) {
   });
 }
 
-function parseCSV(csv) {
-  const lines = csv.split("\n").filter(line => line.trim() !== "");
-  const headers = lines[0].split(",");
-  const rows = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(",");
-    const row = {};
-
-    headers.forEach((header, index) => {
-      row[header.trim()] = values[index]?.trim() || "";
-    });
-
-    rows.push(row);
-  }
-
-  return rows;
-}
-
 function renderTable(rows) {
   const tableBody = document.querySelector("#kpiTable tbody");
   tableBody.innerHTML = "";
@@ -61,11 +43,11 @@ function renderTable(rows) {
     const tr = document.createElement("tr");
 
     const columns = [
-      index + 1,                       // No: generate otomatis
-      row["Employee"],
-      row["Department"],
-      row["Overtime Hours"],
-      row["Shift"]
+      index + 1,
+      row["Employee"] || row["Nama"] || "-",
+      row["Department"] || "-",
+      row["Overtime Hours"] || "0",
+      row["Shift"] || "-"
     ];
 
     columns.forEach((value) => {
@@ -81,7 +63,7 @@ function renderTable(rows) {
 }
 
 function renderChart(rows) {
-  const labels = rows.map(row => row["Employee"]);
+  const labels = rows.map(row => row["Employee"] || row["Nama"] || "-");
   const overtimeData = rows.map(row => parseFloat(row["Overtime Hours"]) || 0);
 
   const ctx = document.getElementById("overtimeChart").getContext("2d");
