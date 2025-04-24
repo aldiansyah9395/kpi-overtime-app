@@ -151,8 +151,8 @@ function toggleDetailRow(name, parentRow) {
       <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
         <thead>
           <tr style="background-color: #f2f2f2;">
-            <th style="text-align: left; padding: 6px;">Tanggal</th>
-            <th style="text-align: left; padding: 6px;">Tull (jam)</th>
+            <th style="text-align: left; padding: 6px;">Date</th>
+            <th style="text-align: left; padding: 6px;">Tull</th>
           </tr>
         </thead>
         <tbody>
@@ -172,7 +172,7 @@ function toggleDetailRow(name, parentRow) {
         </tbody>
       </table>
     `;
-    detailTd.innerHTML = `<strong>Detail Lembur:</strong>` + tableHTML;
+    detailTd.innerHTML = `<strong>Overtime Detail:</strong>` + tableHTML;
   } else {
     detailTd.innerHTML = `<em>Tidak ada data lembur</em>`;
   }
