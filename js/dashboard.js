@@ -129,7 +129,11 @@ function renderTable(rows) {
 function toggleDetailRow(name, parentRow) {
   const existingDetail = parentRow.nextSibling;
   if (existingDetail && existingDetail.classList.contains("detail-row")) {
-    existingDetail.remove(); // close jika sudah terbuka
+    existingDetail.classList.remove("show");
+setTimeout(() => {
+  existingDetail.remove();
+}, 300);
+ // close jika sudah terbuka
     return;
   }
 
@@ -153,6 +157,10 @@ function toggleDetailRow(name, parentRow) {
   detailTr.appendChild(detailTd);
 
   parentRow.after(detailTr);
+setTimeout(() => {
+  detailTr.classList.add("show");
+}, 10);
+
 }
 
 function renderChart(rows) {
