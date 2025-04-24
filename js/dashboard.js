@@ -6,6 +6,9 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Mulai session timeout
+  startSessionTimeout();
+
   document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("isLoggedIn");
     window.location.href = "login.html";
@@ -27,14 +30,29 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-function parseOvertime(value) {
-  if (!value) return 0;
+// Fungsi session timeout
+function startSessionTimeout() {
+  let timeout;
 
-  // Jika nilainya berbentuk tanggal (ISO)
-  if (typeof value === "string" && value.includes("T")) {
-    return 0;
+  function resetTimer() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      alert("Sesi kamu telah habis. Silakan login kembali.");
+      localStorage.removeItem("isLoggedIn"); // Bersihkan status login
+      window.location.href = "login.html";
+    }, 5 * 60 * 1000); // 5 menit
   }
 
+  ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
+    document.addEventListener(evt, resetTimer);
+  });
+
+  resetTimer();
+}
+
+function parseOvertime(value) {
+  if (!value) return 0;
+  if (typeof value === "string" && value.includes("T")) return 0;
   return parseFloat(value) || 0;
 }
 
@@ -80,7 +98,7 @@ function renderChart(rows) {
     const shift = (row["Shift"] || "").toLowerCase();
     if (shift.includes("green")) return "#4CAF50";
     if (shift.includes("blue")) return "#2196F3";
-    return "#FF9800"; // Non Shift
+    return "#FF9800";
   });
 
   const ctx = document.getElementById("overtimeChart").getContext("2d");
