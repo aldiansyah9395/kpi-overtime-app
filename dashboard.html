@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,43 +14,34 @@
   <header class="header">
     <div class="header-container">
       <h1 class="title">Overtime Dashboard Plastic Nippisun Department</h1>
-      <div style="margin-top: 10px; display: flex; gap: 1rem; align-items: center;">
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <span style="width: 16px; height: 16px; background-color: #f39c12; border-radius: 4px; display: inline-block;"></span>
-    <span style="font-size: 14px;">Non Shift</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <span style="width: 16px; height: 16px; background-color: #28a745; border-radius: 4px; display: inline-block;"></span>
-    <span style="font-size: 14px;">Green Team</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <span style="width: 16px; height: 16px; background-color: #007bff; border-radius: 4px; display: inline-block;"></span>
-    <span style="font-size: 14px;">Blue Team</span>
-  </div>
-</div>
-
       <button id="logoutBtn" class="btn-logout">Logout</button>
     </div>
   </header>
 
-<!-- Tombol Upload CSV -->
-<div style="text-align: right; margin-bottom: 1rem;">
-  <a href="https://script.google.com/macros/s/AKfycbwNmjrn-ucp3zdBDFsLgWQCg_4yMJ8XGn-rTEWybinnofz89F5ZuQvJH2sw054Vkr_r/exec" target="_blank">
-    <button style="
-      padding: 0.5rem 1.2rem;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    ">
-      Upload Data OT
-    </button>
-  </a>
-</div>
+  <!-- Indikator Tim (Non Shift, Green Team, Blue Team) -->
+  <div class="team-indicators">
+    <div class="indicator-item">
+      <span class="indicator-circle" style="background-color: #f39c12;"></span>
+      <span class="indicator-text">Non Shift</span>
+    </div>
+    <div class="indicator-item">
+      <span class="indicator-circle" style="background-color: #28a745;"></span>
+      <span class="indicator-text">Green Team</span>
+    </div>
+    <div class="indicator-item">
+      <span class="indicator-circle" style="background-color: #007bff;"></span>
+      <span class="indicator-text">Blue Team</span>
+    </div>
+  </div>
 
-  
+  <!-- Tombol Upload CSV -->
+  <div style="text-align: right; margin-bottom: 1rem;">
+    <a href="https://script.google.com/macros/s/AKfycbwNmjrn-ucp3zdBDFsLgWQCg_4yMJ8XGn-rTEWybinnofz89F5ZuQvJH2sw054Vkr_r/exec" target="_blank">
+      <button class="btn-upload">
+        Upload Data OT
+      </button>
+    </a>
+  </div>
 
   <main class="main-content">
     <div id="dashboardContent">
