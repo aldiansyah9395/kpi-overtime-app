@@ -14,25 +14,33 @@ body {
 
 .header-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center judul */
   align-items: center;
   max-width: 1100px;
   margin: 0 auto;
+  position: relative;
+  flex-wrap: wrap;
+  text-align: center;
 }
 
-/* Posisi tombol logout di pojok kanan atas */
+.title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0 auto;
+}
+
 #logoutBtn {
   position: absolute;
-  top: 5px; /* Jarak dari atas */
-  right: 5px; /* Jarak dari kanan */
+  top: 5px;
+  right: 5px;
   padding: 0.5rem 1.2rem;
-  background-color: #e74c3c; /* Warna tombol logout */
+  background-color: #e74c3c;
   color: white;
   border: none;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-  z-index: 10; /* Pastikan tombol logout berada di atas */
+  z-index: 10;
 }
 
 .team-indicators {
@@ -40,7 +48,12 @@ body {
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  margin-top: 20px;
+  margin: 1rem auto;
+  padding: 0.5rem 0;
+  background-color: #ffffff;
+  max-width: 900px;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 
 .indicator-item {
@@ -50,15 +63,15 @@ body {
 }
 
 .indicator-circle {
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   display: inline-block;
 }
 
 .indicator-text {
-  font-size: 20px;  /* Membuat teks lebih besar */
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 /* Tombol Upload CSV */
@@ -73,13 +86,12 @@ body {
 }
 
 .upload-button-wrapper {
-    margin-top: 5px;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 2rem;
+  margin-top: 5px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 2rem;
 }
-
 
 /* Konten utama */
 .main-content {
@@ -119,26 +131,26 @@ body {
 
 /* Atur lebar kolom */
 .styled-table th:nth-child(1), .styled-table td:nth-child(1) {
-  width: 10%; /* Kolom No */
+  width: 10%;
 }
 
 .styled-table th:nth-child(2), .styled-table td:nth-child(2) {
-  width: 30%; /* Kolom Employee */
-  text-align: left; /* Rata kiri untuk isi data kolom Employee */
+  width: 30%;
+  text-align: left;
 }
 
 .styled-table th:nth-child(3), .styled-table td:nth-child(3) {
-  width: 25%; /* Kolom Department */
-  text-align: center; /* Center untuk isi data kolom Employee */
+  width: 25%;
+  text-align: center;
 }
 
 .styled-table th:nth-child(4), .styled-table td:nth-child(4) {
-  width: 20%; /* Kolom Overtime Hours */
+  width: 20%;
 }
 
 .styled-table th:nth-child(5), .styled-table td:nth-child(5) {
-  width: 15%; /* Kolom Shift */
-  text-align: left; /* Center untuk isi data kolom Employee */
+  width: 15%;
+  text-align: left;
 }
 
 .chart-wrapper {
