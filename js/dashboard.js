@@ -130,10 +130,9 @@ function toggleDetailRow(name, parentRow) {
   const existingDetail = parentRow.nextSibling;
   if (existingDetail && existingDetail.classList.contains("detail-row")) {
     existingDetail.classList.remove("show");
-setTimeout(() => {
-  existingDetail.remove();
-}, 300);
- // close jika sudah terbuka
+    setTimeout(() => {
+      existingDetail.remove();
+    }, 300);
     return;
   }
 
@@ -147,21 +146,44 @@ setTimeout(() => {
   const detailTd = document.createElement("td");
   detailTd.colSpan = 5;
 
-  const detailHTML = details.length > 0
-    ? `<strong>Detail Lembur:</strong><ul style="margin: 4px 0 0 16px;">
-         ${details.map(d => `<li>${d.date}: ${d.hours} jam</li>`).join("")}
-       </ul>`
-    : `<em>Tidak ada data lembur</em>`;
+  if (details.length > 0) {
+    let tableHTML = `
+      <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+        <thead>
+          <tr style="background-color: #f2f2f2;">
+            <th style="text-align: left; padding: 6px;">Tanggal</th>
+            <th style="text-align: left; padding: 6px;">Tull (jam)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${details.map(d => {
+            const tgl = new Date(d.date).toLocaleDateString("id-ID", {
+              year: "numeric",
+              month: "long",
+              day: "numeric"
+            });
+            return `
+              <tr>
+                <td style="padding: 6px;">${tgl}</td>
+                <td style="padding: 6px;">${d.hours}</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    `;
+    detailTd.innerHTML = `<strong>Detail Lembur:</strong>` + tableHTML;
+  } else {
+    detailTd.innerHTML = `<em>Tidak ada data lembur</em>`;
+  }
 
-  detailTd.innerHTML = detailHTML;
   detailTr.appendChild(detailTd);
-
   parentRow.after(detailTr);
-setTimeout(() => {
-  detailTr.classList.add("show");
-}, 10);
-
+  setTimeout(() => {
+    detailTr.classList.add("show");
+  }, 10);
 }
+
 
 function renderChart(rows) {
   const labels = rows.map(row => row["Employee"] || row["Nama"] || "-");
