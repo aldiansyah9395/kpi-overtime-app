@@ -28,33 +28,23 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  // API URL dan API Key
-const API_URL = "https://api.airtable.com/v0/appwuCudV2MkzEV5g/data_ot";
-const API_KEY = "patnSpBujd4mAXpqL.60878bbd75e7c212f69f8d0d9cec090b75a2770ec8bddb1ae02bd4bc37b905fa";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzm_MB53Fjmtp0ff1FO7DY3T84nQ59McuVUq53RlDy-xJ7tbp3cB6AQ2qR7TyDjO_v9/exec?mode=data";
 
-// Fungsi untuk mendapatkan data dari Airtable
-fetch(API_URL, {
-  method: 'GET',
-  headers: {
-    'Authorization': `Bearer ${API_KEY}`, // Menambahkan API Key ke header
-    'Content-Type': 'application/json'
-  }
-})
-  .then(response => response.json())
-  .then((rows) => {
-    // Proses data yang diterima dari API Airtable
-    detailMap = groupDetailByName(rows);
-    const summarized = summarizeOvertimeData(rows);
-    const sortedRows = sortByOvertimeHours(summarized);
-    renderTable(sortedRows);
-    renderChart(sortedRows);
-  })
-  .catch((err) => {
-    // Tampilkan pesan error jika gagal mengambil data
-    document.getElementById("dashboardContent").innerHTML =
-      "<p>Failed to load KPI data.</p>";
-    console.error(err);
-  });
+  fetch(API_URL)
+    .then((response) => response.json())
+    .then((rows) => {
+      detailMap = groupDetailByName(rows);
+      const summarized = summarizeOvertimeData(rows);
+      const sortedRows = sortByOvertimeHours(summarized);
+      renderTable(sortedRows);
+      renderChart(sortedRows);
+    })
+    .catch((err) => {
+      document.getElementById("dashboardContent").innerHTML =
+        "<p>Failed to load KPI data.</p>";
+      console.error(err);
+    });
+});
 
 // ...kode lainnya tetap seperti sebelumnya
 
