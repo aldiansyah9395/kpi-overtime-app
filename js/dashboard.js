@@ -1,23 +1,49 @@
+// Cek dan handle session timeout sebelum render dashboard
 window.addEventListener("DOMContentLoaded", () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const lastActive = localStorage.getItem("lastActive");
+  const now = Date.now();
 
   if (!isLoggedIn) {
     window.location.href = "login.html";
     return;
   }
 
+  // Jika tidak aktif lebih dari 5 menit (300.000 ms), logout otomatis
+  if (lastActive && now - parseInt(lastActive) > 5 * 60 * 1000) {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("lastActive");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Perbarui waktu aktif setiap interaksi
+  document.addEventListener("mousemove", () => localStorage.setItem("lastActive", Date.now()));
+  document.addEventListener("keydown", () => localStorage.setItem("lastActive", Date.now()));
+  localStorage.setItem("lastActive", Date.now());
+
   document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("lastActive");
     window.location.href = "login.html";
   });
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbzUP482PmHzwYaY5U2s_gKPWYStSRKmWkKFMQMJlJOHaBQMbxn_FnIomWHT6g7QX00PHw/exec?mode=data";
+  // API URL Airtable
+  const API_URL = "https://api.airtable.com/v0/appwuCudV2MkzEV5g/data_ot"; // Ganti dengan URL API Airtable kamu
+  const API_KEY = "patnSpBujd4mAXpqL.60878bbd75e7c212f69f8d0d9cec090b75a2770ec8bddb1ae02bd4bc37b905fa"; // Ganti dengan API Key kamu
 
-  fetch(API_URL)
+  // Mengambil data dari Airtable
+  fetch(API_URL, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'Content-Type': 'application/json'
+    }
+  })
     .then((response) => response.json())
     .then((rows) => {
-      detailMap = groupDetailByName(rows);
-      const summarized = summarizeOvertimeData(rows);
+      detailMap = groupDetailByName(rows.records); // Perbarui menjadi rows.records untuk data dari Airtable
+      const summarized = summarizeOvertimeData(rows.records); // Perbarui menjadi rows.records
       const sortedRows = sortByOvertimeHours(summarized);
       renderTable(sortedRows);
       renderChart(sortedRows);
@@ -28,6 +54,10 @@ window.addEventListener("DOMContentLoaded", () => {
       console.error(err);
     });
 });
+
+// ...kode lainnya tetap seperti sebelumnya
+
+// (seluruh isi skrip kamu sebelumnya tetap, tidak perlu diubah lagi)
 
 let detailMap = {};
 
@@ -49,16 +79,16 @@ function summarizeOvertimeData(rows) {
   const summaryMap = {};
 
   rows.forEach(row => {
-    const name = (row["Name"] || row["Nama"] || row["Employee"] || "").trim();
-    const hours = parseOvertime(row["Tull"] || row["Overtime Hours"]);
+    const name = (row["fields"]["Name"] || row["fields"]["Nama"] || row["fields"]["Employee"] || "").trim();
+    const hours = parseOvertime(row["fields"]["Tull"] || row["fields"]["Overtime Hours"]);
 
     if (!name) return;
 
     if (!summaryMap[name]) {
       summaryMap[name] = {
         Employee: name,
-        Department: row["Department"] || "-",
-        Shift: row["Shift"] || "-",
+        Department: row["fields"]["Department"] || "-",
+        Shift: row["fields"]["Shift"] || "-",
         "Overtime Hours": 0
       };
     }
@@ -73,9 +103,10 @@ function groupDetailByName(rows) {
   const detailMap = {};
 
   rows.forEach(row => {
-    const name = (row["Name"] || row["Nama"] || row["Employee"] || "").trim();
-    const date = row["Date"];
-    const hours = parseOvertime(row["Tull"]);
+    const name = (row["fields"]["Name"] || row["fields"]["Nama"] || row["fields"]["Employee"] || "").trim();
+    const date = row["fields"]["Date"];
+    const hours = parseOvertime(row["fields"]["Tull"]);
+    const typeOT = row["fields"]["Type OT"] || "-";
 
     if (!name || !date || isNaN(hours)) return;
 
@@ -83,7 +114,7 @@ function groupDetailByName(rows) {
       detailMap[name] = [];
     }
 
-    detailMap[name].push({ date, hours });
+    detailMap[name].push({ date, hours, typeOT });
   });
 
   return detailMap;
@@ -148,30 +179,33 @@ function toggleDetailRow(name, parentRow) {
 
   if (details.length > 0) {
     let tableHTML = `
-      <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
-        <thead>
-          <tr style="background-color: #f2f2f2;">
-            <th style="text-align: left; padding: 6px;">Date</th>
-            <th style="text-align: left; padding: 6px;">Tull</th>
+  <table style="width: 60%; border-collapse: collapse; margin-top: 5px;">
+    <thead>
+      <tr style="background-color: #f2f2f2;">
+       <th style="width: 30%; text-align: left; padding: 6px;">Date</th>
+       <th style="width: 40%; text-align: center; padding: 6px;">Type OT</th>
+       <th style="width: 30%; text-align: right; padding: 6px;">Tull</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${details.map(d => {
+        const tgl = new Date(d.date).toLocaleDateString("id-ID", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        });
+        return `
+          <tr>
+           <td style="text-align: left; padding: 6px;">${tgl}</td>
+           <td style="text-align: center; padding: 6px;">${d.typeOT}</td>
+           <td style="text-align: right; padding: 6px;">${d.hours}</td>
           </tr>
-        </thead>
-        <tbody>
-          ${details.map(d => {
-            const tgl = new Date(d.date).toLocaleDateString("id-ID", {
-              year: "numeric",
-              month: "long",
-              day: "numeric"
-            });
-            return `
-              <tr>
-                <td style="padding: 6px;">${tgl}</td>
-                <td style="padding: 6px;">${d.hours}</td>
-              </tr>
-            `;
-          }).join("")}
-        </tbody>
-      </table>
-    `;
+        `;
+      }).join("")}
+    </tbody>
+  </table>
+`;
+
     detailTd.innerHTML = `<strong>Overtime Detail:</strong>` + tableHTML;
   } else {
     detailTd.innerHTML = `<em>Tidak ada data lembur</em>`;
@@ -183,7 +217,6 @@ function toggleDetailRow(name, parentRow) {
     detailTr.classList.add("show");
   }, 10);
 }
-
 
 function renderChart(rows) {
   const labels = rows.map(row => row["Employee"] || row["Nama"] || "-");
