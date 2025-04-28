@@ -1,5 +1,6 @@
-// Cek dan handle session timeout sebelum render dashboard
 window.addEventListener("DOMContentLoaded", () => {
+  let detailMap = {};
+
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const lastActive = localStorage.getItem("lastActive");
   const now = Date.now();
@@ -9,7 +10,6 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Jika tidak aktif lebih dari 5 menit (300.000 ms), logout otomatiss
   if (lastActive && now - parseInt(lastActive) > 5 * 60 * 1000) {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("lastActive");
@@ -17,7 +17,6 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Perbarui waktu aktif setiap interaksi
   document.addEventListener("mousemove", () => localStorage.setItem("lastActive", Date.now()));
   document.addEventListener("keydown", () => localStorage.setItem("lastActive", Date.now()));
   localStorage.setItem("lastActive", Date.now());
@@ -31,8 +30,14 @@ window.addEventListener("DOMContentLoaded", () => {
   const API_URL = "https://script.google.com/macros/s/AKfycbxPu3lZFO_6d0OLfDeQ6EG9uN9oHJe7xq_ULm64x99ude4P-KVBG62otW7DWDtfGukmvg/exec?mode=data";
 
   fetch(API_URL)
-    .then((response) => response.json())
-    .then((rows) => {
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((result) => {
+      const rows = result.data; // Diambil dari field `data`
       detailMap = groupDetailByName(rows);
       const summarized = summarizeOvertimeData(rows);
       const sortedRows = sortByOvertimeHours(summarized);
@@ -45,6 +50,7 @@ window.addEventListener("DOMContentLoaded", () => {
       console.error(err);
     });
 });
+
 
 let detailMap = {};
 
