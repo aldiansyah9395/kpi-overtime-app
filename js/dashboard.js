@@ -46,10 +46,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
- //...kode lainnya tetap seperti sebelumnya
-
- //(seluruh isi skrip kamu sebelumnya tetap, tidak perlu diubah lagi)
-
 let detailMap = {};
 
 function parseOvertime(value) {
