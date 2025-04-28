@@ -9,7 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Jika tidak aktif lebih dari 5 menit (300.000 ms), logout otomatis
+  // Jika tidak aktif lebih dari 5 menit (300.000 ms), logout otomatiss
   if (lastActive && now - parseInt(lastActive) > 5 * 60 * 1000) {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("lastActive");
