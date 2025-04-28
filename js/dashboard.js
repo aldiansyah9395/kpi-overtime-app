@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  const API_URL = "https://proxy-overtime-tracker.vercel.app/api/proxy";
+  const API_URL = "https://script.google.com/macros/s/AKfycbxPu3lZFO_6d0OLfDeQ6EG9uN9oHJe7xq_ULm64x99ude4P-KVBG62otW7DWDtfGukmvg/exec?mode=data";
 
   fetch(API_URL)
     .then((response) => {
@@ -37,7 +37,7 @@ window.addEventListener("DOMContentLoaded", () => {
       return response.json();
     })
     .then((result) => {
-      const rows = result.data; // Diambil dari field `data`
+      const rows = result.data; // result.data dari GAS kamu
       detailMap = groupDetailByName(rows);
       const summarized = summarizeOvertimeData(rows);
       const sortedRows = sortByOvertimeHours(summarized);
@@ -45,12 +45,10 @@ window.addEventListener("DOMContentLoaded", () => {
       renderChart(sortedRows);
     })
     .catch((err) => {
-      document.getElementById("dashboardContent").innerHTML =
-        "<p>Failed to load KPI data.</p>";
+      document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
       console.error(err);
     });
 });
-
 
 let detailMap = {};
 
@@ -72,16 +70,16 @@ function summarizeOvertimeData(rows) {
   const summaryMap = {};
 
   rows.forEach(row => {
-    const name = (row["fields"]["Name"] || row["fields"]["Nama"] || row["fields"]["Employee"] || "").trim();
-    const hours = parseOvertime(row["fields"]["Tull"] || row["fields"]["Overtime Hours"]);
+    const name = (row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "").trim();
+    const hours = parseOvertime(row.fields["Tull"] || row.fields["Overtime Hours"]);
 
     if (!name) return;
 
     if (!summaryMap[name]) {
       summaryMap[name] = {
         Employee: name,
-        Department: row["fields"]["Department"] || "-",
-        Shift: row["fields"]["Shift"] || "-",
+        Department: row.fields["Department"] || "-",
+        Shift: row.fields["Shift"] || "-",
         "Overtime Hours": 0
       };
     }
@@ -96,10 +94,10 @@ function groupDetailByName(rows) {
   const detailMap = {};
 
   rows.forEach(row => {
-    const name = (row["fields"]["Name"] || row["fields"]["Nama"] || row["fields"]["Employee"] || "").trim();
-    const date = row["fields"]["Date"];
-    const hours = parseOvertime(row["fields"]["Tull"]);
-    const typeOT = row["fields"]["Type OT"] || "-";
+    const name = (row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "").trim();
+    const date = row.fields["Date"];
+    const hours = parseOvertime(row.fields["Tull"]);
+    const typeOT = row.fields["Type OT"] || "-";
 
     if (!name || !date || isNaN(hours)) return;
 
@@ -134,7 +132,6 @@ function renderTable(rows) {
       const td = document.createElement("td");
       td.textContent = value;
 
-      // Aktifkan klik hanya di kolom nama
       if (i === 1) {
         td.style.cursor = "pointer";
         td.style.color = "#007BFF";
@@ -160,7 +157,6 @@ function toggleDetailRow(name, parentRow) {
     return;
   }
 
-  // Tutup semua detail lainnya
   document.querySelectorAll(".detail-row").forEach(row => row.remove());
 
   const details = detailMap[name] || [];
@@ -172,32 +168,32 @@ function toggleDetailRow(name, parentRow) {
 
   if (details.length > 0) {
     let tableHTML = `
-  <table style="width: 60%; border-collapse: collapse; margin-top: 5px;">
-    <thead>
-      <tr style="background-color: #f2f2f2;">
-       <th style="width: 30%; text-align: left; padding: 6px;">Date</th>
-       <th style="width: 40%; text-align: center; padding: 6px;">Type OT</th>
-       <th style="width: 30%; text-align: right; padding: 6px;">Tull</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${details.map(d => {
-        const tgl = new Date(d.date).toLocaleDateString("id-ID", {
-          year: "numeric",
-          month: "long",
-          day: "numeric"
-        });
-        return `
-          <tr>
-           <td style="text-align: left; padding: 6px;">${tgl}</td>
-           <td style="text-align: center; padding: 6px;">${d.typeOT}</td>
-           <td style="text-align: right; padding: 6px;">${d.hours}</td>
+      <table style="width: 60%; border-collapse: collapse; margin-top: 5px;">
+        <thead>
+          <tr style="background-color: #f2f2f2;">
+            <th style="width: 30%; text-align: left; padding: 6px;">Date</th>
+            <th style="width: 40%; text-align: center; padding: 6px;">Type OT</th>
+            <th style="width: 30%; text-align: right; padding: 6px;">Tull</th>
           </tr>
-        `;
-      }).join("")}
-    </tbody>
-  </table>
-`;
+        </thead>
+        <tbody>
+          ${details.map(d => {
+            const tgl = new Date(d.date).toLocaleDateString("id-ID", {
+              year: "numeric",
+              month: "long",
+              day: "numeric"
+            });
+            return `
+              <tr>
+                <td style="text-align: left; padding: 6px;">${tgl}</td>
+                <td style="text-align: center; padding: 6px;">${d.typeOT}</td>
+                <td style="text-align: right; padding: 6px;">${d.hours}</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    `;
 
     detailTd.innerHTML = `<strong>Overtime Detail:</strong>` + tableHTML;
   } else {
