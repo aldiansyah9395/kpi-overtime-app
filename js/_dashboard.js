@@ -28,27 +28,27 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  //const API_URL = "https://script.google.com/macros/s/AKfycbzm_MB53Fjmtp0ff1FO7DY3T84nQ59McuVUq53RlDy-xJ7tbp3cB6AQ2qR7TyDjO_v9/exec?mode=data";
+  const API_URL = "https://script.google.com/macros/s/AKfycbxPu3lZFO_6d0OLfDeQ6EG9uN9oHJe7xq_ULm64x99ude4P-KVBG62otW7DWDtfGukmvg/exec?mode=data";
 
-  //fetch(API_URL)
-    //.then((response) => response.json())
-    //.then((rows) => {
-      //detailMap = groupDetailByName(rows);
-      //const summarized = summarizeOvertimeData(rows);
-      //const sortedRows = sortByOvertimeHours(summarized);
-      //renderTable(sortedRows);
-      //renderChart(sortedRows);
-    //})
-    //.catch((err) => {
-      //document.getElementById("dashboardContent").innerHTML =
-        //"<p>Failed to load KPI data.</p>";
-      //console.error(err);
-    //});
-//});
+  fetch(API_URL)
+    .then((response) => response.json())
+    .then((rows) => {
+      detailMap = groupDetailByName(rows);
+      const summarized = summarizeOvertimeData(rows);
+      const sortedRows = sortByOvertimeHours(summarized);
+      renderTable(sortedRows);
+      renderChart(sortedRows);
+    })
+    .catch((err) => {
+      document.getElementById("dashboardContent").innerHTML =
+        "<p>Failed to load KPI data.</p>";
+      console.error(err);
+    });
+});
 
-// ...kode lainnya tetap seperti sebelumnya
+ ...kode lainnya tetap seperti sebelumnya
 
-// (seluruh isi skrip kamu sebelumnya tetap, tidak perlu diubah lagi)
+ (seluruh isi skrip kamu sebelumnya tetap, tidak perlu diubah lagi)
 
 let detailMap = {};
 
