@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbxPu3lZFO_6d0OLfDeQ6EG9uN9oHJe7xq_ULm64x99ude4P-KVBG62otW7DWDtfGukmvg/exec?mode=data";
+  const API_URL = "https://proxy-overtime-tracker.vercel.app/api/proxy";
 
   fetch(API_URL)
     .then((response) => {
