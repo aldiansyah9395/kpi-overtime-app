@@ -46,9 +46,9 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
- ...kode lainnya tetap seperti sebelumnya
+ //...kode lainnya tetap seperti sebelumnya
 
- (seluruh isi skrip kamu sebelumnya tetap, tidak perlu diubah lagi)
+ //(seluruh isi skrip kamu sebelumnya tetap, tidak perlu diubah lagi)
 
 let detailMap = {};
 
