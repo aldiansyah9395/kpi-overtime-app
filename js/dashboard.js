@@ -1,4 +1,4 @@
-// --- FINAL FIXED VERSION WITH CORRECT DELETE METHOD ---
+// --- FINAL FIXED VERSION WITH TULL PARSEFLOAT ---
 
 let detailMap = {};
 
@@ -74,6 +74,9 @@ window.addEventListener("DOMContentLoaded", () => {
               clean[field] = record[field];
             }
           });
+          if (clean["Tull"]) {
+            clean["Tull"] = parseFloat(clean["Tull"]);
+          }
           return clean;
         });
 
@@ -130,6 +133,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
 
 function parseOvertime(value) {
   if (!value) return 0;
