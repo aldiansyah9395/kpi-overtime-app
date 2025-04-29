@@ -1,4 +1,4 @@
-// --- FINAL VERSION WITH FIELD FILTERING ---
+// --- FINAL FIXED VERSION WITH CORRECT DELETE METHOD ---
 
 let detailMap = {};
 
@@ -66,7 +66,6 @@ window.addEventListener("DOMContentLoaded", () => {
       complete: async function (results) {
         const rawRecords = results.data;
 
-        // Filter hanya kolom yang valid untuk Airtable
         const allowedFields = ["Date", "Name", "Department", "Shift", "Type OT", "Tull"];
         const records = rawRecords.map(record => {
           const clean = {};
@@ -100,13 +99,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     for (let i = 0; i < recordIds.length; i += 10) {
       const batch = recordIds.slice(i, i + 10);
-      await fetch(API_URL, {
+      const query = batch.map(id => `records[]=${id}`).join('&');
+      await fetch(`${API_URL}?${query}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${airtableApiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ records: batch })
+          Authorization: `Bearer ${airtableApiKey}`
+        }
       });
     }
   }
@@ -114,7 +112,7 @@ window.addEventListener("DOMContentLoaded", () => {
   async function uploadCsvToAirtable(records) {
     for (let i = 0; i < records.length; i += 10) {
       const batch = records.slice(i, i + 10).map(r => ({ fields: r }));
-      await fetch(API_URL, {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${airtableApiKey}`,
@@ -122,6 +120,13 @@ window.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify({ records: batch })
       });
+
+      if (!response.ok) {
+        const errorDetail = await response.text();
+        throw new Error(`Upload failed: ${errorDetail}`);
+      } else {
+        console.log("Batch upload success");
+      }
     }
   }
 });
