@@ -1,6 +1,8 @@
-window.addEventListener("DOMContentLoaded", () => {
-  let detailMap = {};
+// --- FINAL VERSION: dashboard.js ---
 
+let detailMap = {}; // Global declaration
+
+window.addEventListener("DOMContentLoaded", () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const lastActive = localStorage.getItem("lastActive");
   const now = Date.now();
@@ -27,30 +29,68 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbxPu3lZFO_6d0OLfDeQ6EG9uN9oHJe7xq_ULm64x99ude4P-KVBG62otW7DWDtfGukmvg/exec?mode=data";
+  const airtableApiKey = "patiH2AOAO9YAtJhA.61cafc7228a34200466c4235f324b0a9368cf550d04e83656db17d3374ec35d4";
+  const airtableBaseId = "appt1TKEfQeHTq7pc";
+  const airtableTableName = "database-ot";
+  const API_URL = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableName}`;
 
-  fetch(API_URL)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+  fetch(API_URL, {
+    headers: {
+      Authorization: `Bearer ${airtableApiKey}`
+    }
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((result) => {
+    const rows = result.records;
+    detailMap = groupDetailByName(rows);
+    const summarized = summarizeOvertimeData(rows);
+    const sortedRows = sortByOvertimeHours(summarized);
+    renderTable(sortedRows);
+    renderChart(sortedRows);
+  })
+  .catch((err) => {
+    document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
+    console.error(err);
+  });
+
+  document.getElementById('uploadCsvBtn').addEventListener('click', () => {
+    const fileInput = document.getElementById('csvFileInput');
+    if (!fileInput.files.length) {
+      alert("Pilih file CSV terlebih dahulu.");
+      return;
+    }
+
+    const file = fileInput.files[0];
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        const records = results.data;
+
+        records.forEach(record => {
+          fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${airtableApiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fields: record })
+          })
+          .then(response => response.json())
+          .then(data => console.log("Uploaded:", data))
+          .catch(error => console.error("Upload error:", error));
+        });
+
+        alert("Upload CSV ke Airtable selesai!");
       }
-      return response.json();
-    })
-    .then((result) => {
-      const rows = result.data; // result.data dari GAS kamu
-      detailMap = groupDetailByName(rows);
-      const summarized = summarizeOvertimeData(rows);
-      const sortedRows = sortByOvertimeHours(summarized);
-      renderTable(sortedRows);
-      renderChart(sortedRows);
-    })
-    .catch((err) => {
-      document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
-      console.error(err);
     });
+  });
 });
-
-let detailMap = {};
 
 function parseOvertime(value) {
   if (!value) return 0;
