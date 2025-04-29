@@ -1,4 +1,4 @@
-// --- FINAL FIXED VERSION: dashboard.js with reset, bulk upload, and auto-refresh ---
+// --- FINAL VERSION WITH FIELD FILTERING ---
 
 let detailMap = {};
 
@@ -64,7 +64,20 @@ window.addEventListener("DOMContentLoaded", () => {
       header: true,
       skipEmptyLines: true,
       complete: async function (results) {
-        const records = results.data;
+        const rawRecords = results.data;
+
+        // Filter hanya kolom yang valid untuk Airtable
+        const allowedFields = ["Date", "Name", "Department", "Shift", "Type OT", "Tull"];
+        const records = rawRecords.map(record => {
+          const clean = {};
+          allowedFields.forEach(field => {
+            if (record[field] !== undefined) {
+              clean[field] = record[field];
+            }
+          });
+          return clean;
+        });
+
         try {
           await resetAirtableData();
           await uploadCsvToAirtable(records);
@@ -85,7 +98,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const json = await res.json();
     const recordIds = json.records.map(r => r.id);
 
-    // Hapus per batch 10
     for (let i = 0; i < recordIds.length; i += 10) {
       const batch = recordIds.slice(i, i + 10);
       await fetch(API_URL, {
@@ -101,16 +113,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
   async function uploadCsvToAirtable(records) {
     for (let i = 0; i < records.length; i += 10) {
-      const batch = records.slice(i, i + 10);
-      const formatted = batch.map(r => ({ fields: r }));
-
+      const batch = records.slice(i, i + 10).map(r => ({ fields: r }));
       await fetch(API_URL, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${airtableApiKey}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ records: formatted })
+        body: JSON.stringify({ records: batch })
       });
     }
   }
