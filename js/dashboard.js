@@ -1,5 +1,4 @@
-
-// --- FINAL VERSION OF DASHBOARD.JS ---
+// --- FINAL VERSION WITH PAGINATION + ROBUST PARSING ---
 
 let detailMap = {};
 
@@ -35,109 +34,40 @@ window.addEventListener("DOMContentLoaded", () => {
   const airtableTableName = "database-ot";
   const API_URL = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableName}`;
 
-  fetch(API_URL, {
-    headers: { Authorization: `Bearer ${airtableApiKey}` }
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      const rows = result.records;
-      groupDetailByName(rows);
-      const summarized = summarizeOvertimeData(rows);
-      const sortedRows = sortByOvertimeHours(summarized);
-      renderTable(sortedRows);
-      renderChart(sortedRows);
-    })
-    .catch((err) => {
-      document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
-      console.error(err);
-    });
-
-  document.getElementById("uploadCsvBtn").addEventListener("click", async () => {
-    const fileInput = document.getElementById("csvFileInput");
-    if (!fileInput.files.length) {
-      alert("Pilih file CSV terlebih dahulu.");
-      return;
-    }
-
-    const file = fileInput.files[0];
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: async function (results) {
-        const rawRecords = results.data;
-
-        const allowedFields = ["Date", "Name", "Department", "Shift", "Type OT", "Tull"];
-        const records = rawRecords.map(record => {
-          const clean = {};
-          allowedFields.forEach(field => {
-            if (record[field] !== undefined) {
-              clean[field] = record[field];
-            }
-          });
-          if (clean["Tull"]) {
-            clean["Tull"] = parseFloat(clean["Tull"]);
-          }
-          return clean;
-        });
-
-        try {
-          await resetAirtableData();
-          await uploadCsvToAirtable(records);
-          alert("Upload selesai! Halaman akan direfresh.");
-          window.location.reload();
-        } catch (err) {
-          console.error("Upload failed:", err);
-          alert("Gagal upload data. Lihat console untuk detail.");
-        }
-      }
-    });
+  fetchAllRecords().then(rows => {
+    groupDetailByName(rows);
+    const summarized = summarizeOvertimeData(rows);
+    const sortedRows = sortByOvertimeHours(summarized);
+    renderTable(sortedRows);
+    renderChart(sortedRows);
+  }).catch(err => {
+    document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
+    console.error(err);
   });
 
-  async function resetAirtableData() {
-    const res = await fetch(API_URL, {
-      headers: { Authorization: `Bearer ${airtableApiKey}` }
-    });
-    const json = await res.json();
-    const recordIds = json.records.map(r => r.id);
-
-    for (let i = 0; i < recordIds.length; i += 10) {
-      const batch = recordIds.slice(i, i + 10);
-      const query = batch.map(id => `records[]=${id}`).join('&');
-      await fetch(`${API_URL}?${query}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${airtableApiKey}`
-        }
+  async function fetchAllRecords() {
+    let allRecords = [];
+    let offset = "";
+    do {
+      const res = await fetch(API_URL + (offset ? `?offset=${offset}` : ""), {
+        headers: { Authorization: `Bearer ${airtableApiKey}` }
       });
-    }
-  }
-
-  async function uploadCsvToAirtable(records) {
-    for (let i = 0; i < records.length; i += 10) {
-      const batch = records.slice(i, i + 10).map(r => ({ fields: r }));
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${airtableApiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ records: batch })
-      });
-
-      if (!response.ok) {
-        const errorDetail = await response.text();
-        throw new Error(`Upload failed: ${errorDetail}`);
-      } else {
-        console.log("Batch upload success");
-      }
-    }
+      const json = await res.json();
+      allRecords = allRecords.concat(json.records);
+      offset = json.offset;
+    } while (offset);
+    return allRecords;
   }
 });
 
 function parseOvertime(value) {
   if (!value) return 0;
-  if (typeof value === "string" && value.includes("T")) return 0;
-  return parseFloat(value) || 0;
+  if (typeof value === "string") {
+    value = value.trim().replace(",", ".");
+    if (value.includes("T")) return 0; // ignore time strings like 2024-04-16T00:00:00
+  }
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? 0 : parsed;
 }
 
 function sortByOvertimeHours(rows) {
@@ -151,7 +81,7 @@ function sortByOvertimeHours(rows) {
 function summarizeOvertimeData(rows) {
   const summaryMap = {};
   rows.forEach(row => {
-    const name = (row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "").trim();
+    const name = ((row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "") + "").trim();
     const hours = parseOvertime(row.fields["Tull"] || row.fields["Overtime Hours"]);
     if (!name) return;
     if (!summaryMap[name]) {
@@ -170,7 +100,7 @@ function summarizeOvertimeData(rows) {
 function groupDetailByName(rows) {
   detailMap = {};
   rows.forEach(row => {
-    const name = (row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "").trim();
+    const name = ((row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "") + "").trim();
     const date = row.fields["Date"];
     const hours = parseOvertime(row.fields["Tull"]);
     const typeOT = row.fields["Type OT"] || "-";
