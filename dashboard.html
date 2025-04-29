@@ -6,7 +6,7 @@
   <title>Plastic Dept</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Link ke file CSS eksternal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/png" href="favicon_circle.png">
 </head>
@@ -18,7 +18,7 @@
     </div>
   </header>
 
-  <!-- Indikator Tim (Non Shift, Green Team, Blue Team) -->
+  <!-- Indikator Tim -->
   <div class="team-indicators">
     <div class="indicator-item">
       <span class="indicator-circle" style="background-color: #f39c12;"></span>
@@ -34,13 +34,10 @@
     </div>
   </div>
 
-  <!-- Tombol Upload CSV -->
+  <!-- Upload CSV Section -->
   <div style="text-align: right; margin-bottom: 1rem;">
-    <a href="https://script.google.com/macros/s/AKfycbxPu3lZFO_6d0OLfDeQ6EG9uN9oHJe7xq_ULm64x99ude4P-KVBG62otW7DWDtfGukmvg/exec" target="_blank">
-      <button class="btn-upload">
-        Upload Data OT
-      </button>
-    </a>
+    <input type="file" id="csvFileInput" accept=".csv" style="margin-bottom: 0.5rem;" />
+    <button id="uploadCsvBtn" class="btn-upload">Upload Data OT</button>
   </div>
 
   <main class="main-content">
