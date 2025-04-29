@@ -40,6 +40,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const sortedRows = sortByOvertimeHours(summarized);
     renderTable(sortedRows);
     renderChart(sortedRows);
+
+    const loadingEl = document.querySelector("#dashboardContent .loading");
+    if (loadingEl) loadingEl.remove();
   }).catch(err => {
     document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
     console.error(err);
@@ -61,6 +64,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("uploadCsvBtn").addEventListener("click", async () => {
     const fileInput = document.getElementById("csvFileInput");
+    const uploadBtn = document.getElementById("uploadCsvBtn");
+    const statusDiv = document.getElementById("uploadStatus");
+
     if (!fileInput.files.length) {
       alert("Pilih file CSV terlebih dahulu.");
       return;
@@ -95,13 +101,18 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
+          statusDiv.textContent = "⏳ Mengupload data ke Airtable... Harap tunggu.";
+          uploadBtn.disabled = true;
+
           await resetAirtableData();
           await uploadCsvToAirtable(records);
-          alert("Upload selesai! Halaman akan direfresh.");
-          window.location.reload();
+
+          statusDiv.textContent = "✅ Upload selesai. Halaman akan direfresh.";
+          setTimeout(() => window.location.reload(), 1500);
         } catch (err) {
           console.error("Upload failed:", err);
-          alert("Gagal upload data. Lihat console untuk detail.");
+          statusDiv.textContent = "❌ Gagal upload data. Cek konsol untuk detail.";
+          uploadBtn.disabled = false;
         }
       }
     });
