@@ -58,13 +58,111 @@ window.addEventListener("DOMContentLoaded", () => {
     } while (offset);
     return allRecords;
   }
+
+  document.getElementById("uploadCsvBtn").addEventListener("click", async () => {
+    const fileInput = document.getElementById("csvFileInput");
+    if (!fileInput.files.length) {
+      alert("Pilih file CSV terlebih dahulu.");
+      return;
+    }
+
+    const file = fileInput.files[0];
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async function (results) {
+        const rawRecords = results.data;
+        console.log("CSV parsed records:", rawRecords);
+
+        const allowedFields = ["Date", "Name", "Department", "Shift", "Type OT", "Tull"];
+        const records = rawRecords.map(record => {
+          const clean = {};
+          allowedFields.forEach(field => {
+            if (record[field] !== undefined) {
+              clean[field] = record[field];
+            }
+          });
+          if (clean["Tull"]) {
+            clean["Tull"] = parseFloat((clean["Tull"] + "").trim().replace(",", "."));
+          }
+          return clean;
+        }).filter(r => Object.keys(r).length > 0);
+
+        if (records.length === 0) {
+          alert("CSV kosong atau tidak valid. Cek ulang format dan kolomnya.");
+          console.warn("CSV parse result:", results);
+          return;
+        }
+
+        try {
+          await resetAirtableData();
+          await uploadCsvToAirtable(records);
+          alert("Upload selesai! Halaman akan direfresh.");
+          window.location.reload();
+        } catch (err) {
+          console.error("Upload failed:", err);
+          alert("Gagal upload data. Lihat console untuk detail.");
+        }
+      }
+    });
+  });
+
+  async function resetAirtableData() {
+    const res = await fetch(API_URL, {
+      headers: { Authorization: `Bearer ${airtableApiKey}` }
+    });
+    const json = await res.json();
+    const recordIds = json.records.map(r => r.id);
+
+    if (!recordIds.length) {
+      console.info("Tidak ada record yang perlu dihapus.");
+      return;
+    }
+
+    for (let i = 0; i < recordIds.length; i += 10) {
+      const batch = recordIds.slice(i, i + 10);
+      const query = batch.map(id => `records[]=${id}`).join('&');
+      await fetch(`${API_URL}?${query}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${airtableApiKey}`
+        }
+      });
+    }
+  }
+
+  async function uploadCsvToAirtable(records) {
+    if (!records || !records.length) {
+      console.warn("Tidak ada record valid untuk di-upload.");
+      return;
+    }
+
+    for (let i = 0; i < records.length; i += 10) {
+      const batch = records.slice(i, i + 10).map(r => ({ fields: r }));
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ records: batch })
+      });
+
+      if (!response.ok) {
+        const errorDetail = await response.text();
+        throw new Error(`Upload failed: ${errorDetail}`);
+      } else {
+        console.log("Batch upload success");
+      }
+    }
+  }
 });
 
 function parseOvertime(value) {
   if (!value) return 0;
   if (typeof value === "string") {
     value = value.trim().replace(",", ".");
-    if (value.includes("T")) return 0; // ignore time strings like 2024-04-16T00:00:00
+    if (value.includes("T")) return 0;
   }
   const parsed = parseFloat(value);
   return isNaN(parsed) ? 0 : parsed;
