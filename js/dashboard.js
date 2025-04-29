@@ -1,5 +1,3 @@
-// --- FINAL FIXED VERSION WITH TULL PARSEFLOAT ---
-
 let detailMap = {};
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -41,7 +39,7 @@ window.addEventListener("DOMContentLoaded", () => {
     .then((response) => response.json())
     .then((result) => {
       const rows = result.records;
-      detailMap = groupDetailByName(rows);
+      groupDetailByName(rows);
       const summarized = summarizeOvertimeData(rows);
       const sortedRows = sortByOvertimeHours(summarized);
       renderTable(sortedRows);
@@ -134,7 +132,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
 function parseOvertime(value) {
   if (!value) return 0;
   if (typeof value === "string" && value.includes("T")) return 0;
@@ -191,12 +188,12 @@ function groupDetailByName(rows) {
     detailMap[name].push({ date, hours, typeOT });
   });
 
-  // Sort detail list per nama berdasarkan tanggal ASC
   Object.keys(detailMap).forEach(name => {
     detailMap[name].sort((a, b) => new Date(a.date) - new Date(b.date));
   });
 
   return detailMap;
+}
 
 function renderTable(rows) {
   const tableBody = document.querySelector("#kpiTable tbody");
@@ -238,9 +235,7 @@ function toggleDetailRow(name, parentRow) {
   const existingDetail = parentRow.nextSibling;
   if (existingDetail && existingDetail.classList.contains("detail-row")) {
     existingDetail.classList.remove("show");
-    setTimeout(() => {
-      existingDetail.remove();
-    }, 300);
+    setTimeout(() => existingDetail.remove(), 300);
     return;
   }
 
