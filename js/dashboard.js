@@ -1,6 +1,6 @@
-// --- FINAL VERSION: dashboard.js ---
+// --- FINAL FIXED VERSION: dashboard.js with reset, bulk upload, and auto-refresh ---
 
-let detailMap = {}; // Global declaration
+let detailMap = {};
 
 window.addEventListener("DOMContentLoaded", () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -34,32 +34,26 @@ window.addEventListener("DOMContentLoaded", () => {
   const airtableTableName = "database-ot";
   const API_URL = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableName}`;
 
+  // Fetch data
   fetch(API_URL, {
-    headers: {
-      Authorization: `Bearer ${airtableApiKey}`
-    }
+    headers: { Authorization: `Bearer ${airtableApiKey}` }
   })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((result) => {
-    const rows = result.records;
-    detailMap = groupDetailByName(rows);
-    const summarized = summarizeOvertimeData(rows);
-    const sortedRows = sortByOvertimeHours(summarized);
-    renderTable(sortedRows);
-    renderChart(sortedRows);
-  })
-  .catch((err) => {
-    document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
-    console.error(err);
-  });
+    .then((response) => response.json())
+    .then((result) => {
+      const rows = result.records;
+      detailMap = groupDetailByName(rows);
+      const summarized = summarizeOvertimeData(rows);
+      const sortedRows = sortByOvertimeHours(summarized);
+      renderTable(sortedRows);
+      renderChart(sortedRows);
+    })
+    .catch((err) => {
+      document.getElementById("dashboardContent").innerHTML = "<p>Failed to load KPI data.</p>";
+      console.error(err);
+    });
 
-  document.getElementById('uploadCsvBtn').addEventListener('click', () => {
-    const fileInput = document.getElementById('csvFileInput');
+  document.getElementById("uploadCsvBtn").addEventListener("click", async () => {
+    const fileInput = document.getElementById("csvFileInput");
     if (!fileInput.files.length) {
       alert("Pilih file CSV terlebih dahulu.");
       return;
@@ -69,27 +63,57 @@ window.addEventListener("DOMContentLoaded", () => {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: function(results) {
+      complete: async function (results) {
         const records = results.data;
-
-        records.forEach(record => {
-          fetch(API_URL, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${airtableApiKey}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ fields: record })
-          })
-          .then(response => response.json())
-          .then(data => console.log("Uploaded:", data))
-          .catch(error => console.error("Upload error:", error));
-        });
-
-        alert("Upload CSV ke Airtable selesai!");
+        try {
+          await resetAirtableData();
+          await uploadCsvToAirtable(records);
+          alert("Upload selesai! Halaman akan direfresh.");
+          window.location.reload();
+        } catch (err) {
+          console.error("Upload failed:", err);
+          alert("Gagal upload data. Lihat console untuk detail.");
+        }
       }
     });
   });
+
+  async function resetAirtableData() {
+    const res = await fetch(API_URL, {
+      headers: { Authorization: `Bearer ${airtableApiKey}` }
+    });
+    const json = await res.json();
+    const recordIds = json.records.map(r => r.id);
+
+    // Hapus per batch 10
+    for (let i = 0; i < recordIds.length; i += 10) {
+      const batch = recordIds.slice(i, i + 10);
+      await fetch(API_URL, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ records: batch })
+      });
+    }
+  }
+
+  async function uploadCsvToAirtable(records) {
+    for (let i = 0; i < records.length; i += 10) {
+      const batch = records.slice(i, i + 10);
+      const formatted = batch.map(r => ({ fields: r }));
+
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ records: formatted })
+      });
+    }
+  }
 });
 
 function parseOvertime(value) {
