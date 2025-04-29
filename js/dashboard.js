@@ -1,3 +1,6 @@
+
+// --- FINAL VERSION OF DASHBOARD.JS ---
+
 let detailMap = {};
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -32,7 +35,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const airtableTableName = "database-ot";
   const API_URL = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableName}`;
 
-  // Fetch data
   fetch(API_URL, {
     headers: { Authorization: `Bearer ${airtableApiKey}` }
   })
@@ -148,13 +150,10 @@ function sortByOvertimeHours(rows) {
 
 function summarizeOvertimeData(rows) {
   const summaryMap = {};
-
   rows.forEach(row => {
     const name = (row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "").trim();
     const hours = parseOvertime(row.fields["Tull"] || row.fields["Overtime Hours"]);
-
     if (!name) return;
-
     if (!summaryMap[name]) {
       summaryMap[name] = {
         Employee: name,
@@ -163,47 +162,36 @@ function summarizeOvertimeData(rows) {
         "Overtime Hours": 0
       };
     }
-
     summaryMap[name]["Overtime Hours"] += hours;
   });
-
   return Object.values(summaryMap);
 }
 
 function groupDetailByName(rows) {
   detailMap = {};
-
   rows.forEach(row => {
     const name = (row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "").trim();
     const date = row.fields["Date"];
     const hours = parseOvertime(row.fields["Tull"]);
     const typeOT = row.fields["Type OT"] || "-";
-
     if (!name || !date || isNaN(hours)) return;
-
     if (!detailMap[name]) {
       detailMap[name] = [];
     }
-
     detailMap[name].push({ date, hours, typeOT });
   });
-
   Object.keys(detailMap).forEach(name => {
     detailMap[name].sort((a, b) => new Date(a.date) - new Date(b.date));
   });
-
   return detailMap;
 }
 
 function renderTable(rows) {
   const tableBody = document.querySelector("#kpiTable tbody");
   tableBody.innerHTML = "";
-
   rows.forEach((row, index) => {
     const tr = document.createElement("tr");
-
     const name = row["Employee"] || row["Nama"] || "-";
-
     const columns = [
       index + 1,
       name,
@@ -211,23 +199,18 @@ function renderTable(rows) {
       parseOvertime(row["Overtime Hours"]),
       row["Shift"] || "-"
     ];
-
     columns.forEach((value, i) => {
       const td = document.createElement("td");
       td.textContent = value;
-
       if (i === 1) {
         td.style.cursor = "pointer";
         td.style.color = "#007BFF";
         td.addEventListener("click", () => toggleDetailRow(name, tr));
       }
-
       tr.appendChild(td);
     });
-
     tableBody.appendChild(tr);
   });
-
   document.getElementById("kpiTable").style.display = "table";
 }
 
@@ -238,50 +221,23 @@ function toggleDetailRow(name, parentRow) {
     setTimeout(() => existingDetail.remove(), 300);
     return;
   }
-
   document.querySelectorAll(".detail-row").forEach(row => row.remove());
-
   const details = detailMap[name] || [];
-
   const detailTr = document.createElement("tr");
   detailTr.classList.add("detail-row");
   const detailTd = document.createElement("td");
   detailTd.colSpan = 5;
-
   if (details.length > 0) {
-    let tableHTML = `
-      <table style="width: 60%; border-collapse: collapse; margin-top: 5px;">
-        <thead>
-          <tr style="background-color: #f2f2f2;">
-            <th style="width: 30%; text-align: left; padding: 6px;">Date</th>
-            <th style="width: 40%; text-align: center; padding: 6px;">Type OT</th>
-            <th style="width: 30%; text-align: right; padding: 6px;">Tull</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${details.map(d => {
-            const tgl = new Date(d.date).toLocaleDateString("id-ID", {
-              year: "numeric",
-              month: "long",
-              day: "numeric"
-            });
-            return `
-              <tr>
-                <td style="text-align: left; padding: 6px;">${tgl}</td>
-                <td style="text-align: center; padding: 6px;">${d.typeOT}</td>
-                <td style="text-align: right; padding: 6px;">${d.hours}</td>
-              </tr>
-            `;
-          }).join("")}
-        </tbody>
-      </table>
-    `;
-
+    let tableHTML = `<table style="width: 60%; border-collapse: collapse; margin-top: 5px;"><thead><tr style="background-color: #f2f2f2;"><th style="width: 30%; text-align: left; padding: 6px;">Date</th><th style="width: 40%; text-align: center; padding: 6px;">Type OT</th><th style="width: 30%; text-align: right; padding: 6px;">Tull</th></tr></thead><tbody>`;
+    tableHTML += details.map(d => {
+      const tgl = new Date(d.date).toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" });
+      return `<tr><td style="text-align: left; padding: 6px;">${tgl}</td><td style="text-align: center; padding: 6px;">${d.typeOT}</td><td style="text-align: right; padding: 6px;">${d.hours}</td></tr>`;
+    }).join("");
+    tableHTML += "</tbody></table>";
     detailTd.innerHTML = `<strong>Overtime Detail:</strong>` + tableHTML;
   } else {
     detailTd.innerHTML = `<em>Tidak ada data lembur</em>`;
   }
-
   detailTr.appendChild(detailTd);
   parentRow.after(detailTr);
   setTimeout(() => {
@@ -298,9 +254,7 @@ function renderChart(rows) {
     if (shift.includes("blue")) return "#2196F3";
     return "#FF9800";
   });
-
   const ctx = document.getElementById("overtimeChart").getContext("2d");
-
   new Chart(ctx, {
     type: "bar",
     data: {
@@ -316,19 +270,8 @@ function renderChart(rows) {
     options: {
       indexAxis: 'x',
       scales: {
-        x: {
-          title: {
-            display: true,
-            text: "Employee"
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: "Overtime Hours"
-          },
-          beginAtZero: true
-        }
+        x: { title: { display: true, text: "Employee" } },
+        y: { title: { display: true, text: "Overtime Hours" }, beginAtZero: true }
       }
     }
   });
