@@ -174,7 +174,7 @@ function summarizeOvertimeData(rows) {
 }
 
 function groupDetailByName(rows) {
-  const detailMap = {};
+  detailMap = {};
 
   rows.forEach(row => {
     const name = (row.fields["Name"] || row.fields["Nama"] || row.fields["Employee"] || "").trim();
