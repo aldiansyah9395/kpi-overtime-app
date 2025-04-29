@@ -191,8 +191,12 @@ function groupDetailByName(rows) {
     detailMap[name].push({ date, hours, typeOT });
   });
 
+  // Sort detail list per nama berdasarkan tanggal ASC
+  Object.keys(detailMap).forEach(name => {
+    detailMap[name].sort((a, b) => new Date(a.date) - new Date(b.date));
+  });
+
   return detailMap;
-}
 
 function renderTable(rows) {
   const tableBody = document.querySelector("#kpiTable tbody");
