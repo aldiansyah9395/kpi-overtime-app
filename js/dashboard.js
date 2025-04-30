@@ -29,6 +29,17 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
+    // ✅ Tambahkan ini untuk handle file name tampil
+    const fileInput = document.getElementById("csvFileInput");
+    const fileNameDisplay = document.getElementById("fileNameDisplay");
+  
+    if (fileInput && fileNameDisplay) {
+      fileInput.addEventListener("change", () => {
+        const fileName = fileInput.files.length ? fileInput.files[0].name : "";
+        fileNameDisplay.textContent = fileName;
+      });
+    }
+
   const airtableApiKey = "patiH2AOAO9YAtJhA.61cafc7228a34200466c4235f324b0a9368cf550d04e83656db17d3374ec35d4";
   const airtableBaseId = "appt1TKEfQeHTq7pc";
   const airtableTableName = "database-ot";
@@ -119,28 +130,30 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   async function resetAirtableData() {
-    const res = await fetch(API_URL, {
-      headers: { Authorization: `Bearer ${airtableApiKey}` }
-    });
-    const json = await res.json();
-    const recordIds = json.records.map(r => r.id);
-
-    if (!recordIds.length) {
-      console.info("Tidak ada record yang perlu dihapus.");
-      return;
-    }
-
-    for (let i = 0; i < recordIds.length; i += 10) {
-      const batch = recordIds.slice(i, i + 10);
-      const query = batch.map(id => `records[]=${id}`).join('&');
-      await fetch(`${API_URL}?${query}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${airtableApiKey}`
-        }
+    let offset = "";
+    do {
+      const res = await fetch(API_URL + (offset ? `?offset=${offset}` : ""), {
+        headers: { Authorization: `Bearer ${airtableApiKey}` }
       });
-    }
+      const json = await res.json();
+      const recordIds = json.records.map(r => r.id);
+      offset = json.offset;
+  
+      if (recordIds.length > 0) {
+        for (let i = 0; i < recordIds.length; i += 10) {
+          const batch = recordIds.slice(i, i + 10);
+          const query = batch.map(id => `records[]=${id}`).join("&");
+          await fetch(`${API_URL}?${query}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${airtableApiKey}`
+            }
+          });
+        }
+      }
+    } while (offset);
   }
+  
 
   async function uploadCsvToAirtable(records) {
     if (!records || !records.length) {
