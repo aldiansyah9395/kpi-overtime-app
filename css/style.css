@@ -257,19 +257,27 @@ body {
   text-align: center;
 }
 
-/* ✅ Kontainer untuk Pie Chart */
+/* ✅ Pie Chart dibungkus dalam box yang menyerupai upload-box */
+.pie-chart-box {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 150px;
+  margin: 1rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .pie-chart-container {
-  max-width: 150px;      /* Ukuran maksimum di desktop */
-  width: 90%;            /* Responsif di mobile */
-  margin: 20px auto;
+  width: 100%;
   position: relative;
 }
 
-/* ✅ Canvas Pie Chart */
 #pieChart {
   width: 100% !important;
   height: auto !important;
   display: block;
 }
-
-
