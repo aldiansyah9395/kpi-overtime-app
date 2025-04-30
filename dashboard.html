@@ -80,18 +80,24 @@
       </div>      
     </div>
   </main>
+  <!-- Plugin Chart.js untuk datalabels -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
-  <script src="js/dashboard.js"></script>
-  <script>
+<!-- Script utama dashboard -->
+<script src="js/dashboard.js"></script>
+
+<!-- Session activity tracking -->
+<script>
   function updateActivity() {
     localStorage.setItem("lastActive", Date.now().toString());
   }
 
   window.addEventListener("mousemove", updateActivity);
   window.addEventListener("keydown", updateActivity);
-  window.addEventListener("touchstart", updateActivity); // tambahan untuk mobile
-  window.addEventListener("scroll", updateActivity);     // tambahan untuk scroll
+  window.addEventListener("touchstart", updateActivity);
+  window.addEventListener("scroll", updateActivity);
 </script>
+
 
 </body>
 </html>
