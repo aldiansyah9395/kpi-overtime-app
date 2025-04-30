@@ -258,8 +258,8 @@ body {
 }
 
 #pieChart {
-  max-width: 180px;
-  width: 100%;
+  max-width: 100px;
+  width: 25%;
   height: auto;
   margin: 20px auto;
   display: block;
