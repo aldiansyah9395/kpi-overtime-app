@@ -51,6 +51,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const sortedRows = sortByOvertimeHours(summarized);
     renderTable(sortedRows);
     renderChart(sortedRows);
+    renderPieChart(sortedRows);
+
 
     const loadingEl = document.querySelector("#dashboardContent .loading");
     if (loadingEl) loadingEl.remove();
@@ -328,3 +330,52 @@ function renderChart(rows) {
     }
   });
 }
+
+// --- Pie Chart: Persentase total Tull per Shift ---
+function renderPieChart(rows) {
+  const shiftTotals = {
+    "green": 0,
+    "blue": 0,
+    "non shift": 0,
+  };
+
+  rows.forEach(row => {
+    const shift = (row["Shift"] || "").toLowerCase();
+    const hours = parseOvertime(row["Overtime Hours"]);
+
+    if (shift.includes("green")) shiftTotals.green += hours;
+    else if (shift.includes("blue")) shiftTotals.blue += hours;
+    else shiftTotals["non shift"] += hours;
+  });
+
+  const ctx = document.getElementById("pieChart").getContext("2d");
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ["Green Team", "Blue Team", "Non Shift"],
+      datasets: [{
+        data: [
+          shiftTotals.green,
+          shiftTotals.blue,
+          shiftTotals["non shift"]
+        ],
+        backgroundColor: [
+          "#4CAF50",  // Green
+          "#2196F3",  // Blue
+          "#FF9800"   // Orange
+        ],
+        borderColor: "#fff",
+        borderWidth: 2
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+}
+
