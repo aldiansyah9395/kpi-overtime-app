@@ -112,7 +112,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-          statusDiv.textContent = "⏳ Mengupload data ke Airtable... Harap tunggu.";
+          statusDiv.textContent = "⏳ Mengupload data ke Database... Harap tunggu.";
           uploadBtn.disabled = true;
 
           await resetAirtableData();
