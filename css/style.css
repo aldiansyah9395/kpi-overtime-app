@@ -265,3 +265,14 @@ body {
   display: block;
 }
 
+.pie-chart-container {
+  width: 200px;       /* Atur ukuran pie chart */
+  margin: 0 auto;     /* Center */
+  position: relative;
+}
+
+#pieChart {
+  width: 100% !important;
+  height: auto !important;
+}
+
