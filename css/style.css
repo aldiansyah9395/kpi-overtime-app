@@ -33,6 +33,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   z-index: 10; /* Pastikan tombol logout berada di atas */
+  
 }
 
 .team-indicators {
@@ -61,24 +62,39 @@ body {
   font-weight: bold;
 }
 
-/* Tombol Upload CSV */
+/* Tombol Upload */
 .btn-upload {
-  padding: 0.5rem 1.2rem;
-  background-color: #28a745;
+  background-color: #008d23d6;
   color: white;
+  padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 6px;
-  font-weight: bold;
   cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s, transform 0.1s;
+  align-items: center;
 }
 
-.upload-button-wrapper {
-    margin-top: 5px;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 2rem;
+.btn-upload:hover {
+  background-color: #0056b3;
 }
+
+.btn-upload:active {
+  transform: scale(0.97);
+}
+
+.btn-upload:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* File input */
+#csvFileInput {
+  margin-right: 1rem;
+  padding: 0.3rem;
+}
+
 
 
 /* Konten utama */
@@ -146,7 +162,16 @@ body {
   padding: 1rem;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
 }
+
+#overtimeChart {
+  width: 100% !important;
+  height: auto !important;
+}
+
 
 .loading {
   text-align: center;
@@ -163,4 +188,71 @@ body {
 .detail-row.show {
   opacity: 1;
   transform: translateY(0);
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;           /* Posisi elemen ke tengah */
+  margin: 0.2rem 1rem 0 auto;      /* 🔧 Ubah JARAK ATAS jadi 1rem */
+  max-width: 150px;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  height: auto;                  /* 🔧 Biarkan tinggi menyesuaikan isi */
+}
+
+.upload-label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;         /* 🔧 Perkecil jarak ke input */
+  text-align: center;
+}
+
+#csvFileInput {
+  margin-bottom: 0.3rem;         /* 🔧 Perkecil jarak ke tombol */
+  padding: 6px;
+  width: 64%;
+  max-width: 130px;
+  text-align: center;
+}
+
+.btn-upload {
+  background-color: #28a745;
+  color: white;
+  padding: 0.4rem 1rem;          /* 🔧 Kurangi tinggi tombol */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  width: 100%;
+  max-width: 130px;
+}
+
+.upload-status {
+  margin-top: 0.6rem;
+  font-style: italic;
+  color: #555;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.custom-file-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  max-width: 130px;
+}
+
+.file-name-display {
+  font-size: 0.85rem;
+  color: #444;
+  margin-bottom: 0.6rem;
+  text-align: center;
 }
