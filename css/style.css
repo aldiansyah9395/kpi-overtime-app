@@ -257,13 +257,15 @@ body {
   text-align: center;
 }
 
+/* ✅ Kontainer untuk Pie Chart */
 .pie-chart-container {
-  max-width: 220px;      /* Ukuran maksimum pie chart */
-  width: 100%;
-  margin: 20px auto;     /* Center dan spasi */
+  max-width: 300px;      /* Ukuran maksimum di desktop */
+  width: 90%;            /* Responsif di mobile */
+  margin: 20px auto;
   position: relative;
 }
 
+/* ✅ Canvas Pie Chart */
 #pieChart {
   width: 100% !important;
   height: auto !important;
