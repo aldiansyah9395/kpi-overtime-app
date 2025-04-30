@@ -257,22 +257,17 @@ body {
   text-align: center;
 }
 
-#pieChart {
-  max-width: 100px;
-  width: 25%;
-  height: auto;
-  margin: 20px auto;
-  display: block;
-}
-
 .pie-chart-container {
-  width: 200px;       /* Atur ukuran pie chart */
-  margin: 0 auto;     /* Center */
+  max-width: 220px;      /* Ukuran maksimum pie chart */
+  width: 100%;
+  margin: 20px auto;     /* Center dan spasi */
   position: relative;
 }
 
 #pieChart {
   width: 100% !important;
   height: auto !important;
+  display: block;
 }
+
 
