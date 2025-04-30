@@ -77,5 +77,16 @@
   </main>
 
   <script src="js/dashboard.js"></script>
+  <script>
+  function updateActivity() {
+    localStorage.setItem("lastActive", Date.now().toString());
+  }
+
+  window.addEventListener("mousemove", updateActivity);
+  window.addEventListener("keydown", updateActivity);
+  window.addEventListener("touchstart", updateActivity); // tambahan untuk mobile
+  window.addEventListener("scroll", updateActivity);     // tambahan untuk scroll
+</script>
+
 </body>
 </html>
