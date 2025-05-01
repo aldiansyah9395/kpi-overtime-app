@@ -20,20 +20,18 @@ body {
   margin: 0 auto;
 }
 
-/* Posisi tombol logout di pojok kanan atas */
 #logoutBtn {
   position: absolute;
-  top: 5px; /* Jarak dari atas */
-  right: 5px; /* Jarak dari kanan */
+  top: 5px;
+  right: 5px;
   padding: 0.5rem 1.2rem;
-  background-color: #e74c3c; /* Warna tombol logout */
+  background-color: #e74c3c;
   color: white;
   border: none;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-  z-index: 10; /* Pastikan tombol logout berada di atas */
-  
+  z-index: 10;
 }
 
 .team-indicators {
@@ -58,184 +56,68 @@ body {
 }
 
 .indicator-text {
-  font-size: 20px;  /* Membuat teks lebih besar */
+  font-size: 20px;
   font-weight: bold;
 }
 
-/* Tombol Upload */
-.btn-upload {
-  background-color: #008d23d6;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s, transform 0.1s;
-  align-items: center;
-}
-
-.btn-upload:hover {
-  background-color: #0056b3;
-}
-
-.btn-upload:active {
-  transform: scale(0.97);
-}
-
-.btn-upload:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-/* File input */
-#csvFileInput {
-  margin-right: 1rem;
-  padding: 0.3rem;
-}
-
-
-
-/* Konten utama */
-.main-content {
-  padding: 2rem;
+.dashboard-widgets {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem auto 0 auto;
+  padding: 0 1rem;
   max-width: 1100px;
-  margin: 0 auto;
+  flex-wrap: wrap;
 }
 
-.table-wrapper {
-  margin-bottom: 2rem;
-  overflow-x: auto;
-}
-
-.styled-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.styled-table th, .styled-table td {
-  padding: 12px 16px;
-  text-align: right;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.styled-table th {
-  background-color: #e3f2fd;
-  color: #0d47a1;
-  text-align: left;
-}
-
-.styled-table td:first-child, .styled-table th:first-child {
-  text-align: left;
-}
-
-/* Atur lebar kolom */
-.styled-table th:nth-child(1), .styled-table td:nth-child(1) {
-  width: 10%; /* Kolom No */
-}
-
-.styled-table th:nth-child(2), .styled-table td:nth-child(2) {
-  width: 30%; /* Kolom Employee */
-  text-align: left; /* Rata kiri untuk isi data kolom Employee */
-}
-
-.styled-table th:nth-child(3), .styled-table td:nth-child(3) {
-  width: 25%; /* Kolom Department */
-  text-align: center; /* Center untuk isi data kolom Employee */
-}
-
-.styled-table th:nth-child(4), .styled-table td:nth-child(4) {
-  width: 20%; /* Kolom Overtime Hours */
-}
-
-.styled-table th:nth-child(5), .styled-table td:nth-child(5) {
-  width: 15%; /* Kolom Shift */
-  text-align: left; /* Center untuk isi data kolom Employee */
-}
-
-.chart-wrapper {
-  background: white;
+.pie-chart-box {
+  background-color: #fff;
   padding: 1rem;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
+  flex: 1;
+  max-width: 240px;
+  min-width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-#overtimeChart {
+.pie-chart-container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+#pieChart {
   width: 100% !important;
   height: auto !important;
-}
-
-
-.loading {
-  text-align: center;
-  font-style: italic;
-  color: #999;
-}
-
-.detail-row {
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.detail-row.show {
-  opacity: 1;
-  transform: translateY(0);
+  display: block;
 }
 
 .upload-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;           /* Posisi elemen ke tengah */
-  margin: 0.2rem 1rem 0 auto;      /* 🔧 Ubah JARAK ATAS jadi 1rem */
-  max-width: 150px;
   background-color: #fff;
   padding: 1rem;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  height: auto;                  /* 🔧 Biarkan tinggi menyesuaikan isi */
+  flex: 1;
+  max-width: 240px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .upload-label {
   font-weight: 500;
-  margin-bottom: 0.3rem;         /* 🔧 Perkecil jarak ke input */
+  margin-bottom: 0.3rem;
   text-align: center;
 }
 
 #csvFileInput {
-  margin-bottom: 0.3rem;         /* 🔧 Perkecil jarak ke tombol */
-  padding: 6px;
-  width: 64%;
-  max-width: 130px;
-  text-align: center;
-}
-
-.btn-upload {
-  background-color: #28a745;
-  color: white;
-  padding: 0.4rem 1rem;          /* 🔧 Kurangi tinggi tombol */
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s;
-  width: 100%;
-  max-width: 130px;
-}
-
-.upload-status {
-  margin-top: 0.6rem;
-  font-style: italic;
-  color: #555;
-  text-align: center;
-  font-size: 0.9rem;
+  display: none;
 }
 
 .custom-file-btn {
@@ -257,29 +139,98 @@ body {
   text-align: center;
 }
 
-.pie-chart-box {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  max-width: 240px;
-  margin: 0.2rem auto 0.2rem 0.2rem; 
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Ubah dari 'left' ke 'center' */
-  flex-direction: column;
-  gap: 0.5rem; /* Tambahkan gap agar jarak antar elemen lebih konsisten */
-}
-
-.pie-chart-container {
+.btn-upload {
+  background-color: #28a745;
+  color: white;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
   width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
+  max-width: 130px;
 }
 
-#pieChart {
+.upload-status {
+  margin-top: 0.6rem;
+  font-style: italic;
+  color: #555;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.table-wrapper {
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.styled-table th, .styled-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.styled-table th {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  text-align: left;
+}
+
+.styled-table td {
+  text-align: right;
+}
+
+.styled-table td:first-child, .styled-table th:first-child {
+  text-align: left;
+}
+
+.styled-table th:nth-child(1), .styled-table td:nth-child(1) { width: 10%; }
+.styled-table th:nth-child(2), .styled-table td:nth-child(2) {
+  width: 30%; text-align: left;
+}
+.styled-table th:nth-child(3), .styled-table td:nth-child(3) {
+  width: 25%; text-align: center;
+}
+.styled-table th:nth-child(4), .styled-table td:nth-child(4) { width: 20%; }
+.styled-table th:nth-child(5), .styled-table td:nth-child(5) {
+  width: 15%; text-align: left;
+}
+
+.chart-wrapper {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+#overtimeChart {
   width: 100% !important;
   height: auto !important;
-  display: block;
+}
+
+.loading {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+}
+
+.detail-row {
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.detail-row.show {
+  opacity: 1;
+  transform: translateY(0);
 }
