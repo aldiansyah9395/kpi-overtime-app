@@ -205,6 +205,12 @@ body {
   justify-content: center;
 }
 
+
+.pie-chart-container canvas {
+  width: 180px !important;
+  height: 180px !important;
+}
+
 #pieChart {
   width: 180px !important;
   height: 180px !important;
