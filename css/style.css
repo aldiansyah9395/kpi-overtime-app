@@ -213,12 +213,13 @@ body {
 
 .custom-pie-legend {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-direction: row;       /* ← sejajarkan horizontal */
+  gap: 1.5rem;               /* ← beri jarak antar item */
   margin-top: 0.8rem;
   font-size: 0.85rem;
   color: #333;
-  align-items: center;
+  justify-content: center;   /* ← biar rapi di tengah */
+  flex-wrap: wrap;           /* ← biar responsif kalau sempit */
 }
 
 .custom-pie-legend div {
