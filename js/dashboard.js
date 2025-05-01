@@ -368,7 +368,7 @@ function renderPieChart(rows) {
       responsive: true,
       plugins: {
         legend: {
-          position: 'bottom'
+          display: false
         },
         datalabels: {
           color: "#fff",
