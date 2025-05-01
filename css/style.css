@@ -211,6 +211,29 @@ body {
   display: block;
 }
 
+.custom-pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  color: #333;
+  align-items: center;
+}
+
+.custom-pie-legend div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-pie-legend .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
 /* ================= TABEL ================= */
 .table-wrapper {
   margin-top: 2rem;
