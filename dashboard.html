@@ -6,6 +6,7 @@
   <title>Plastic Dept</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/png" href="favicon_circle.png">
@@ -34,33 +35,30 @@
     </div>
   </div>
 
-  <!-- Upload CSV Section -->
-  <div class="upload-box">
-    <label for="csvFileInput" class="upload-label">Pilih file data:</label>
-  
-    <!-- Label custom tombol -->
-    <label for="csvFileInput" class="custom-file-btn">Choose File</label>
-    <input type="file" id="csvFileInput" accept=".csv" style="display: none;" />
-    
-    <!-- Tempat tampilkan nama file -->
-    <span id="fileNameDisplay" class="file-name-display"></span>
-  
-    <button id="uploadCsvBtn" class="btn-upload">Upload Data OT</button>
-    <div id="uploadStatus" class="upload-status"></div>
+  <!-- Wrapper Upload & Pie Chart (Flex) -->
+  <div class="dashboard-widgets">
+    <!-- Upload Box -->
+    <div class="upload-box">
+      <label for="csvFileInput" class="upload-label">Pilih file data:</label>
+      <label for="csvFileInput" class="custom-file-btn">Choose File</label>
+      <input type="file" id="csvFileInput" accept=".csv" style="display: none;" />
+      <span id="fileNameDisplay" class="file-name-display"></span>
+      <button id="uploadCsvBtn" class="btn-upload">Upload Data OT</button>
+      <div id="uploadStatus" class="upload-status"></div>
+    </div>
+
+    <!-- Pie Chart Box -->
+    <div class="pie-chart-box">
+      <div class="pie-chart-container">
+        <canvas id="pieChart"></canvas>
+      </div>
+    </div>
   </div>
-  
 
-
+  <!-- Main Content -->
   <main class="main-content">
     <div id="dashboardContent">
       <p class="loading">Loading data...</p>
-
-      <div class="pie-chart-box">
-        <div class="pie-chart-container">
-          <canvas id="pieChart"></canvas>
-        </div>
-      </div>
-
 
       <div class="table-wrapper">
         <table id="kpiTable" class="styled-table" style="display: none;">
@@ -79,27 +77,22 @@
 
       <div class="chart-wrapper">
         <canvas id="overtimeChart"></canvas>
-      </div>      
+      </div>
     </div>
   </main>
-  <!-- Plugin Chart.js untuk datalabels -->
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
-<!-- Script utama dashboard -->
-<script src="js/dashboard.js"></script>
+  <!-- Script: Main logic -->
+  <script src="js/dashboard.js"></script>
 
-<!-- Session activity tracking -->
-<script>
-  function updateActivity() {
-    localStorage.setItem("lastActive", Date.now().toString());
-  }
-
-  window.addEventListener("mousemove", updateActivity);
-  window.addEventListener("keydown", updateActivity);
-  window.addEventListener("touchstart", updateActivity);
-  window.addEventListener("scroll", updateActivity);
-</script>
-
-
+  <!-- Session Activity Handler -->
+  <script>
+    function updateActivity() {
+      localStorage.setItem("lastActive", Date.now().toString());
+    }
+    window.addEventListener("mousemove", updateActivity);
+    window.addEventListener("keydown", updateActivity);
+    window.addEventListener("touchstart", updateActivity);
+    window.addEventListener("scroll", updateActivity);
+  </script>
 </body>
 </html>
