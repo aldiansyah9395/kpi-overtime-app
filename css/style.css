@@ -21,10 +21,6 @@ body {
   margin: 0 auto;
 }
 
-.title {
-  text-align: center;
-  flex: 1;
-
 #logoutBtn {
   position: absolute;
   top: 5px;
