@@ -2,47 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Overtime Monitoring</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <!-- Chart.js -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overtime Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" href="favicon_circle.png" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Overtime Monitoring</h1>
-    <button id="logoutBtn">Logout</button>
+  <header class="header">
+    <div class="header-container">
+      <h1 class="title">Overtime Dashboard Plastic Nippisun Department</h1>
+      <button id="logoutBtn" class="btn-logout">Logout</button>
+    </div>
   </header>
 
-  <main id="dashboardContent">
-    <div class="upload-section">
-      <input type="file" id="csvFileInput" accept=".csv" hidden />
-      <label for="csvFileInput" class="custom-file-upload">Pilih File CSV</label>
-      <span id="fileNameDisplay">Belum ada file</span>
-      <button id="uploadCsvBtn">Upload CSV</button>
-      <div id="uploadStatus"></div>
+  <div class="team-indicators">
+    <div class="indicator-item"><span class="indicator-circle" style="background-color: #f39c12;"></span> Non Shift</div>
+    <div class="indicator-item"><span class="indicator-circle" style="background-color: #28a745;"></span> Green Team</div>
+    <div class="indicator-item"><span class="indicator-circle" style="background-color: #007bff;"></span> Blue Team</div>
+  </div>
+
+  <div class="dashboard-widgets">
+    <div class="upload-box">
+      <label class="upload-label">Pilih file CSV:</label>
+      <label for="csvFileInput" class="custom-file-btn">Choose File</label>
+      <input type="file" id="csvFileInput" accept=".csv" style="display: none;" />
+      <span id="fileNameDisplay" class="file-name-display"></span>
+      <button id="uploadCsvBtn" class="btn-upload">Upload Data OT</button>
+      <div id="uploadStatus" class="upload-status"></div>
     </div>
 
-    <div class="table-container loading">
-      <p>⏳ Memuat data lembur...</p>
+    <div class="pie-chart-box">
+      <h4 class="chart-title">OT Shift Distribution</h4>
+      <div class="pie-chart-container">
+        <canvas id="pieChart"></canvas>
+      </div>
     </div>
+  </div>
 
-    <div class="chart-container">
-      <canvas id="barChart"></canvas>
-    </div>
-
-    <div class="chart-container">
-      <canvas id="pieChart"></canvas>
+  <main class="main-content">
+    <div id="dashboardContent">
+      <p class="loading">Loading data...</p>
+      <div class="table-wrapper">
+        <table id="kpiTable" class="styled-table" style="display: none;">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Employee</th>
+              <th>Department</th>
+              <th>Overtime Hours</th>
+              <th>Shift</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="overtimeChart"></canvas>
+      </div>
     </div>
   </main>
 
-  <footer>
-    <p>© 2025 Overtime Monitoring</p>
-  </footer>
-
-  <!-- Firebase JS file -->
-  <script type="module" src="js/dashboard.js"></script>
+  <!-- Firebase Config -->
+  <script src="firebase-config.js"></script>
+  <!-- Main Script -->
+  <script src="js/dashboard.js"></script>
 </body>
 </html>
