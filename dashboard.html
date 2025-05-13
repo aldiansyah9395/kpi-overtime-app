@@ -2,103 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plastic Dept</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Overtime Monitoring</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <!-- PapaParse for CSV parsing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" type="image/png" href="favicon_circle.png">
 </head>
 <body>
-  <header class="header">
-    <div class="header-container">
-      <h1 class="title">Overtime Dashboard Plastic Nippisun Department</h1>
-      <button id="logoutBtn" class="btn-logout">Logout</button>
-    </div>
+  <header>
+    <h1>Overtime Monitoring</h1>
+    <button id="logoutBtn">Logout</button>
   </header>
 
-  <!-- Indikator Tim -->
-  <div class="team-indicators">
-    <div class="indicator-item">
-      <span class="indicator-circle" style="background-color: #f39c12;"></span>
-      <span class="indicator-text">Non Shift</span>
-    </div>
-    <div class="indicator-item">
-      <span class="indicator-circle" style="background-color: #28a745;"></span>
-      <span class="indicator-text">Green Team</span>
-    </div>
-    <div class="indicator-item">
-      <span class="indicator-circle" style="background-color: #007bff;"></span>
-      <span class="indicator-text">Blue Team</span>
-    </div>
-  </div>
-
-  <!-- Wrapper Upload & Pie Chart (Flex) -->
-  <div class="dashboard-widgets">
-    <!-- Upload Box -->
-    <div class="upload-box">
-      <label for="csvFileInput" class="upload-label">Pilih file data:</label>
-      <label for="csvFileInput" class="custom-file-btn">Choose File</label>
-      <input type="file" id="csvFileInput" accept=".csv" style="display: none;" />
-      <span id="fileNameDisplay" class="file-name-display"></span>
-      <button id="uploadCsvBtn" class="btn-upload">Upload Data OT</button>
-      <div id="uploadStatus" class="upload-status"></div>
+  <main id="dashboardContent">
+    <div class="upload-section">
+      <input type="file" id="csvFileInput" accept=".csv" hidden />
+      <label for="csvFileInput" class="custom-file-upload">Pilih File CSV</label>
+      <span id="fileNameDisplay">Belum ada file</span>
+      <button id="uploadCsvBtn">Upload CSV</button>
+      <div id="uploadStatus"></div>
     </div>
 
-    <!-- Pie Chart Box -->
-    <div class="pie-chart-box">
-      <h4 class="chart-title">OT Shift Distribution</h4>
-      <div class="pie-chart-container">
-        <canvas id="pieChart"></canvas>
-      </div>
-      <div class="custom-pie-legend">
-        <div><span class="dot" style="background-color: #28a745;"></span> Green Team</div>
-        <div><span class="dot" style="background-color: #007bff;"></span> Blue Team</div>
-        <div><span class="dot" style="background-color: #f39c12;"></span> Non Shift</div>
-      </div>
+    <div class="table-container loading">
+      <p>⏳ Memuat data lembur...</p>
     </div>
-  </div>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <div id="dashboardContent">
-      <p class="loading">Loading data...</p>
+    <div class="chart-container">
+      <canvas id="barChart"></canvas>
+    </div>
 
-      <div class="table-wrapper">
-        <table id="kpiTable" class="styled-table" style="display: none;">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Employee</th>
-              <th>Department</th>
-              <th>Overtime Hours</th>
-              <th>Shift</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-
-      <div class="chart-wrapper">
-        <canvas id="overtimeChart"></canvas>
-      </div>
+    <div class="chart-container">
+      <canvas id="pieChart"></canvas>
     </div>
   </main>
 
-  <!-- Script: Main logic -->
-  <script src="js/dashboard.js"></script>
+  <footer>
+    <p>© 2025 Overtime Monitoring</p>
+  </footer>
 
-  <!-- Session Activity Handler -->
-  <script>
-    function updateActivity() {
-      localStorage.setItem("lastActive", Date.now().toString());
-    }
-    window.addEventListener("mousemove", updateActivity);
-    window.addEventListener("keydown", updateActivity);
-    window.addEventListener("touchstart", updateActivity);
-    window.addEventListener("scroll", updateActivity);
-  </script>
+  <!-- Firebase JS file -->
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
