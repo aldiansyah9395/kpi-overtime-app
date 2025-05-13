@@ -1,4 +1,22 @@
-// --- FINAL VERSION WITH PAGINATION + ROBUST PARSING ---
+// --- FINAL VERSION WITH FIREBASE MIGRATION ---
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import {
+  getDatabase, ref, get, set, remove
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDz6zUAZ6xnxqNBnEZ-dumR3eGpYaa1zPU",
+  authDomain: "overtime-monitoring.firebaseapp.com",
+  databaseURL: "https://overtime-monitoring-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "overtime-monitoring",
+  storageBucket: "overtime-monitoring.appspot.com",
+  messagingSenderId: "431682328476",
+  appId: "1:431682328476:web:e3f0e16e3878e1a4971c0d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 let detailMap = {};
 
@@ -29,21 +47,15 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-    // ✅ Tambahkan ini untuk handle file name tampil
-    const fileInput = document.getElementById("csvFileInput");
-    const fileNameDisplay = document.getElementById("fileNameDisplay");
-  
-    if (fileInput && fileNameDisplay) {
-      fileInput.addEventListener("change", () => {
-        const fileName = fileInput.files.length ? fileInput.files[0].name : "";
-        fileNameDisplay.textContent = fileName;
-      });
-    }
+  const fileInput = document.getElementById("csvFileInput");
+  const fileNameDisplay = document.getElementById("fileNameDisplay");
 
-  const airtableApiKey = "patiH2AOAO9YAtJhA.61cafc7228a34200466c4235f324b0a9368cf550d04e83656db17d3374ec35d4";
-  const airtableBaseId = "appt1TKEfQeHTq7pc";
-  const airtableTableName = "database-ot";
-  const API_URL = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableName}`;
+  if (fileInput && fileNameDisplay) {
+    fileInput.addEventListener("change", () => {
+      const fileName = fileInput.files.length ? fileInput.files[0].name : "";
+      fileNameDisplay.textContent = fileName;
+    });
+  }
 
   fetchAllRecords().then(rows => {
     groupDetailByName(rows);
@@ -53,7 +65,6 @@ window.addEventListener("DOMContentLoaded", () => {
     renderChart(sortedRows);
     renderPieChart(sortedRows);
 
-
     const loadingEl = document.querySelector("#dashboardContent .loading");
     if (loadingEl) loadingEl.remove();
   }).catch(err => {
@@ -62,37 +73,26 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   async function fetchAllRecords() {
-    let allRecords = [];
-    let offset = "";
-    do {
-      const res = await fetch(API_URL + (offset ? `?offset=${offset}` : ""), {
-        headers: { Authorization: `Bearer ${airtableApiKey}` }
-      });
-      const json = await res.json();
-      allRecords = allRecords.concat(json.records);
-      offset = json.offset;
-    } while (offset);
-    return allRecords;
+    const snapshot = await get(ref(db, "database-ot"));
+    const data = snapshot.val();
+    return Object.entries(data || {}).map(([id, fields]) => ({ id, fields }));
   }
 
   document.getElementById("uploadCsvBtn").addEventListener("click", async () => {
-    const fileInput = document.getElementById("csvFileInput");
-    const uploadBtn = document.getElementById("uploadCsvBtn");
+    const file = fileInput.files[0];
     const statusDiv = document.getElementById("uploadStatus");
+    const uploadBtn = document.getElementById("uploadCsvBtn");
 
-    if (!fileInput.files.length) {
+    if (!file) {
       alert("Pilih file CSV terlebih dahulu.");
       return;
     }
 
-    const file = fileInput.files[0];
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: async function (results) {
         const rawRecords = results.data;
-        console.log("CSV parsed records:", rawRecords);
-
         const allowedFields = ["Date", "Name", "Department", "Shift", "Type OT", "Tull"];
         const records = rawRecords.map(record => {
           const clean = {};
@@ -108,8 +108,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }).filter(r => Object.keys(r).length > 0);
 
         if (records.length === 0) {
-          alert("CSV kosong atau tidak valid. Cek ulang format dan kolomnya.");
-          console.warn("CSV parse result:", results);
+          alert("CSV kosong atau tidak valid.");
           return;
         }
 
@@ -117,70 +116,31 @@ window.addEventListener("DOMContentLoaded", () => {
           statusDiv.textContent = "⏳ Mengupload data ke Database... Harap tunggu.";
           uploadBtn.disabled = true;
 
-          await resetAirtableData();
-          await uploadCsvToAirtable(records);
+          await resetFirebaseData();
+          await uploadCsvToFirebase(records);
 
           statusDiv.textContent = "✅ Upload selesai. Halaman akan direfresh.";
           setTimeout(() => window.location.reload(), 1500);
         } catch (err) {
           console.error("Upload failed:", err);
-          statusDiv.textContent = "❌ Gagal upload data. Cek konsol untuk detail.";
+          statusDiv.textContent = "❌ Gagal upload data.";
           uploadBtn.disabled = false;
         }
       }
     });
   });
 
-  async function resetAirtableData() {
-    let offset = "";
-    do {
-      const res = await fetch(API_URL + (offset ? `?offset=${offset}` : ""), {
-        headers: { Authorization: `Bearer ${airtableApiKey}` }
-      });
-      const json = await res.json();
-      const recordIds = json.records.map(r => r.id);
-      offset = json.offset;
-  
-      if (recordIds.length > 0) {
-        for (let i = 0; i < recordIds.length; i += 10) {
-          const batch = recordIds.slice(i, i + 10);
-          const query = batch.map(id => `records[]=${id}`).join("&");
-          await fetch(`${API_URL}?${query}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${airtableApiKey}`
-            }
-          });
-        }
-      }
-    } while (offset);
+  async function resetFirebaseData() {
+    await remove(ref(db, "database-ot"));
   }
-  
 
-  async function uploadCsvToAirtable(records) {
-    if (!records || !records.length) {
-      console.warn("Tidak ada record valid untuk di-upload.");
-      return;
-    }
-
-    for (let i = 0; i < records.length; i += 10) {
-      const batch = records.slice(i, i + 10).map(r => ({ fields: r }));
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${airtableApiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ records: batch })
-      });
-
-      if (!response.ok) {
-        const errorDetail = await response.text();
-        throw new Error(`Upload failed: ${errorDetail}`);
-      } else {
-        console.log("Batch upload success");
-      }
-    }
+  async function uploadCsvToFirebase(records) {
+    const updates = {};
+    records.forEach((record, index) => {
+      const id = `record_${index}_${Date.now()}`;
+      updates[`database-ot/${id}`] = record;
+    });
+    await set(ref(db), updates);
   }
 });
 
